@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: BoardAdmin
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  type-aliases-package: com.example.board.model
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    root: info
+    com.example.board.repository: debug
+  pattern:
+    console:"%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
