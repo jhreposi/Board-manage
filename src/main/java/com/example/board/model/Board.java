@@ -9,10 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class Board {
 
-    private int categoryId;
-    private String categoryName;
-    private Board board;
+    private int boardId;
+    private BoardType boardName;
 
+    public enum BoardType {
+        NOTICE,
+        FREE,
+        GALLERY,
+        QUESTION,
+        ;
+    }
 }

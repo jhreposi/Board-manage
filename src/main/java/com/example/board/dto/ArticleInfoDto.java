@@ -1,17 +1,17 @@
-package com.example.board.model;
+package com.example.board.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Article {
-
+public class ArticleInfoDto {
     private int articleId;
+    private int boardId;
+    private int memberId;
     private String title;
     private String content;
     private int viewCount;
@@ -19,8 +19,7 @@ public class Article {
     private String PinnedYn;
     private String createdAt;
     private String updatedAt;
-    private Board board;
-    private Category category;
-
+    private String boardName;
+    private String categoryName;
 
 }
