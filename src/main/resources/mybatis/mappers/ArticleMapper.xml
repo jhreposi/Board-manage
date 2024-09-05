@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.board.repository.ArticleMapper">
+
+    <select id="selectNoticeList" resultMap="ArticleResultMap">
+        SELECT
+            a.article_id,
+            a.title,
+            a.content,
+            a.view_count,
+            a.created_at,
+            a.updated_at,
+            c.category_id,
+            c.name,
+            c.board_type
+        FROM article a
+            INNER JOIN category c   ON a.category_id = c.category_id
+
+    </select>
+
+    <resultMap id="ArticleResultMap" type="Article">
+
+        <id property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="secretYn" column="secret_yn"/>
+        <result property="pinnedYn" column="pinned_yn"/>
+
+        <association property="category" javaType="Category">
+            <id property="categoryId" column="category_id"/>
+            <result property="boardType" column="board_type"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+</mapper>

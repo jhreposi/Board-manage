@@ -15,13 +15,15 @@ spring:
 
 mybatis:
   type-aliases-package: com.example.board.model
-  mapper-locations: classpath:mappers/*.xml
+  mapper-locations: classpath:mybatis/mappers/*.xml
   configuration:
     map-underscore-to-camel-case: true
+    jdbc-type-for-null: "NULL"
+
 logging:
   level:
     jdbc:
       sqlonly: trace
       audit: off
-      resultset: off
+      resultset: trace
       connection: off

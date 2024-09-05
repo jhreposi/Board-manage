@@ -1,18 +1,16 @@
 package com.example.board.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Category {
 
     private int categoryId;
-    private String categoryName;
-    private Board board;
+    private String name;
+    private int boardType;  // 1: NOTICE, 2: FREE, 3: GALLERY, 4: QUESTION
 
 }

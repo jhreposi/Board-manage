@@ -2,13 +2,10 @@ package com.example.board;
 
 import com.example.board.dto.ArticleInfoDto;
 import com.example.board.model.Article;
-import com.example.board.model.ArticleInfo;
-import com.example.board.model.Board;
 import com.example.board.model.Category;
+import com.example.board.repository.ArticleMapper;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -20,15 +17,10 @@ class BoardAdminApplicationTests {
 
     @Test
     public void toDto() {
-        Board board = Board.builder()
-                .boardName(Board.BoardType.valueOf("QUESTION"))
-                .boardId(1)
-                .build();
 
         Category category = Category.builder()
                 .categoryId(2)
-                .categoryName("공지")
-                .board(board)
+                .name("공지")
                 .build();
 
         Article article = Article.builder()
@@ -36,9 +28,8 @@ class BoardAdminApplicationTests {
                 .title("제목")
                 .createdAt("2024")
                 .content("내용")
-                .PinnedYn("Y")
-                .SecretYn("N")
-                .board(board)
+                .pinnedYn("Y")
+                .secretYn("N")
                 .category(category)
                 .build();
 
@@ -65,6 +56,12 @@ class BoardAdminApplicationTests {
 
 
 
+    }
+    @Test
+    public void mapping(ArticleMapper mapper) {
+        mapper.selectNoticeList().stream().forEach(article -> {
+            System.out.println(article.toString());
+        });
     }
 
 }
