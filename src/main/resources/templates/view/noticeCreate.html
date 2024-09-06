@@ -29,10 +29,6 @@
             <input type="text" name="content" id="content">
         </div>
 
-    <!--    <div class="form-row">-->
-    <!--        <label for="file">파일 첨부</label>-->
-    <!--        <input type="file" name="files" id="file">-->
-    <!--    </div>-->
         <div>
             <label for="pinnedYn">상단 고정</label>
             <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn">
@@ -47,7 +43,7 @@
             <button type="button" id="saveBtn">저장</button>
         </div>
     </form>
-</div>
+
 <script>
     const saveForm = document.getElementById('saveForm');
     const category = document.getElementById('category');
@@ -122,4 +118,5 @@
         return target.value.length < up || target.value.length > down;
     }
 </script>
+</div>
 </html>

@@ -32,7 +32,7 @@ public class ArticleReqDto {
     @Getter
     @Setter
     @ToString
-    public class Notice {
+    public class NoticePost {
         private String title;
         private String content;
         private String pinnedYn;
