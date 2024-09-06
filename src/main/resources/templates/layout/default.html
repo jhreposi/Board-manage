@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Board Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+    <div class="layout">
+        <div class="top-section">
+            <div class="top-left"></div>
+            <div class="top-right">
+                <div class="top-right-area1">
+                    님 안녕하세요
+                </div>
+                <div class="top-right-area2">
+                    로그인아웃
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="bottom-left">
+                게시판들..
+            </div>
+            <div class="bottom-right">
+                <main layout:fragment="content">
+                </main>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

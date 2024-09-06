@@ -10,20 +10,21 @@ spring:
     show-sql: true
 
   thymeleaf:
-    prefix: classpath:/templates/view/
+    prefix: classpath:/templates/
     suffix: .html
+    cache: false
 
 mybatis:
   type-aliases-package: com.example.board.model
   mapper-locations: classpath:mybatis/mappers/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    jdbc-type-for-null: "NULL"
+    jdbc-type-for-null: NULL
 
 logging:
   level:
     jdbc:
       sqlonly: trace
       audit: off
-      resultset: trace
+      resultset: info
       connection: off

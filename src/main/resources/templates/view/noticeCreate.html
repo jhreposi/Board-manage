@@ -1,55 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/likeTable.css">
-</head>
-<body style="padding: 0 3%">
-<h2>공지사항 관리</h2>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<div layout:fragment="content">
+    <h2>공지사항 관리</h2>
 
-<form method="post" id="saveForm" action="/notice/create">
-    <div class="form-row">
-        <label for="category">분류</label>
-        <select name="categoryId" id="category">
-            <option value=0>카테고리 선택</option>
-            <option value="NOTICE">공지</option>
-            <option value="">알림</option>
-<!--            <option value="3">음악</option>-->
-<!--            <option value="4">영화</option>-->
-<!--            <option value="5">여행</option>-->
-        </select>
-    </div>
+    <form method="post" id="saveForm" action="/notice/create">
+        <div class="form-row">
+            <label for="category">분류</label>
+            <select name="categoryId" id="category">
+                <option value=0>카테고리 선택</option>
+                <option value="NOTICE">공지</option>
+                <option value="">알림</option>
+    <!--            <option value="3">음악</option>-->
+    <!--            <option value="4">영화</option>-->
+    <!--            <option value="5">여행</option>-->
+            </select>
+        </div>
 
-    <div class="form-row">
-        <label for="title">제목</label>
-        <input type="text" name="title" id="title">
-    </div>
+        <div class="form-row">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title">
+        </div>
 
-    <div class="form-row">
-        <label for="content">내용</label>
-        <input type="text" name="content" id="content">
-    </div>
+        <div class="form-row">
+            <label for="content">내용</label>
+            <input type="text" name="content" id="content">
+        </div>
 
-<!--    <div class="form-row">-->
-<!--        <label for="file">파일 첨부</label>-->
-<!--        <input type="file" name="files" id="file">-->
-<!--    </div>-->
-    <div>
-        <label for="pinnedYn">상단 고정</label>
-        <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn">
-    </div>
+    <!--    <div class="form-row">-->
+    <!--        <label for="file">파일 첨부</label>-->
+    <!--        <input type="file" name="files" id="file">-->
+    <!--    </div>-->
+        <div>
+            <label for="pinnedYn">상단 고정</label>
+            <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn">
+        </div>
 
-    <div>
-        <input type="hidden" name="boardType" value="" id="boardType">
-    </div>
+        <div>
+            <input type="hidden" name="boardType" value="" id="boardType">
+        </div>
 
-    <div class="form-buttons">
-        <button type="button" onclick="location.href='/notice'">취소</button>
-        <button type="button" id="saveBtn">저장</button>
-    </div>
-</form>
-</body>
+        <div class="form-buttons">
+            <button type="button" onclick="location.href='/notice'">취소</button>
+            <button type="button" id="saveBtn">저장</button>
+        </div>
+    </form>
+</div>
 <script>
     const saveForm = document.getElementById('saveForm');
     const category = document.getElementById('category');

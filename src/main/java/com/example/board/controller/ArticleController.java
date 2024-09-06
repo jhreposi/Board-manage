@@ -39,13 +39,13 @@ public class ArticleController {
 //                        .collect(Collectors.toList());
 
         model.addAttribute("articles", article);
-        return "notice";
+        return "view/notice";
     }
 
     @GetMapping("/notice/new")
     public String createNotice() {
         // TODO: 2024-09-05 boardType, boardName 리스트 넘겨서 selectBox 배치
-        return "noticeCreate";
+        return "view/noticeCreate";
     }
     @PostMapping("/notice/create")
     public ResponseEntity<?> createNotice(ArticleReqDto.Notice reqArticle) {
