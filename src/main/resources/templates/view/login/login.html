@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+
+    <div layout:fragment="content">
+        <script src="https://cdn.jsdelivr.net/npm/jsencrypt@3.0.0-rc.1/bin/jsencrypt.min.js"></script>
+
+        <div class="grid">
+            <form method="post" action="/login" id="saveForm">
+                <input type="text" name="loginId" placeholder="아이디" />
+                <input type="password" id="password" placeholder="비밀번호" />
+                <input type="hidden" name="password" id="encryptedPassword"  />
+                <input type="hidden" th:value="${publicKey}" id="publicKey">
+
+                <button type="button" id="formBtn">로그인</button>
+            </form>
+        </div>
+
+        <script>
+            const button = document.getElementById('formBtn');
+            const publicKey = document.getElementById('publicKey').value
+
+            let encrypt = new JSEncrypt();
+            encrypt.setPublicKey(publicKey);
+
+            button.addEventListener('click', function() {
+
+                const password = document.getElementById('password').value
+                const encrypted = encrypt.encrypt(password);
+                document.getElementById('encryptedPassword').value = encrypted
+
+                document.getElementById('saveForm').submit();
+            });
+        </script>
+    </div>
+
+</html>
