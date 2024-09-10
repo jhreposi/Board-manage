@@ -55,14 +55,16 @@ public class LoginController {
         int adminId = loginService.getIdByAdmin(requestAdmin);
         Admin responseAdmin = loginService.getAdminById(adminId);
 
-        ModelMapper modelMapper = new ModelMapper();
-        AdminRes.AdminInfoDto adminInfo =  modelMapper.map(responseAdmin, AdminRes.AdminInfoDto.class);
+        HttpSession session = request.getSession(true);
 
-        HttpSession session = request.getSession();
+        if (session.isNew()) {
+            session.setAttribute("adminId", responseAdmin.getAdminId());
+            session.setAttribute("loginId", responseAdmin.getLoginId());
+            session.setAttribute("role", responseAdmin.getRole());
+            session.setMaxInactiveInterval(60 * 30); //만료시간 30분
 
-        if (session.getAttribute("adminInfo") != null) {
-            session.removeAttribute("adminInfo");
-            session.setAttribute("adminInfo", adminInfo);
+        } else {
+            // TODO: 2024-09-10 로그인상태에서 로그인 시도하면 접근제한, 기존세션제거?
         }
         return ResponseEntity.ok(ResponseData.builder().message("로그인 성공").build());
     }

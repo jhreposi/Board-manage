@@ -14,5 +14,6 @@ public class AdminRes {
     public static class AdminInfoDto {
         private int adminId;
         private String loginId;
+        private String role;
     }
 }

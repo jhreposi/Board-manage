@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ResponseData<T> {
-    private T Data;
+    private T data;
     private String message;
 }

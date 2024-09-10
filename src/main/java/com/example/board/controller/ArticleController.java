@@ -23,7 +23,7 @@ import java.util.List;
 public class ArticleController {
     ArticleService articleService;
 
-    @GetMapping("/notice")
+    @GetMapping("notice")
     public String getArticle(Model model) {
         List<Article> article = articleService.getArticle();
 
@@ -37,15 +37,13 @@ public class ArticleController {
         return "view/notice";
     }
 
-    @GetMapping("/notice/new")
+    @GetMapping("admin/notice/new")
     public String createNotice() {
         // TODO: 2024-09-05 boardType, boardName 리스트 넘겨서 selectBox 배치
-        /**
-         * 레이아웃에 게시판 리스트 정보를 로그인시 세션과 연결지어 해결 가능한지
-         */
+
         return "view/noticeCreate";
     }
-    @PostMapping("/notice/create")
+    @PostMapping("notice/create")
     public ResponseEntity<?> createNotice(ArticleReqDto.NoticePost requst) {
         // TODO: 2024-09-05 Article로 변환 후 insert
         /**

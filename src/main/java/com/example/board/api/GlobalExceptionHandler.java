@@ -22,9 +22,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException e) {
-        log.info("RuntimeException message => {}", e.getMessage());
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> runtimeExceptionHandler(Exception e) {
+        log.info("Exception message => {}", e.getMessage());
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code("E000")
