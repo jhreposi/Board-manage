@@ -28,3 +28,4 @@ logging:
       audit: off
       resultset: info
       connection: off
+      sqltiming: off
