@@ -10,9 +10,10 @@ import lombok.*;
 @ToString
 public class Admin {
 
-    private String adminId;
+    private int adminId;
     private String loginId;
     private String password;
+    private final String role = "ADMIN";
 
 
     public static Admin from(AdminReq.LoginDto loginDto) {
