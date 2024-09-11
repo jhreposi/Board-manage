@@ -1,10 +1,10 @@
 package com.example.board.global;
 
+import com.example.board.dto.AdminRes;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 public class AdminFilter implements Filter {
@@ -14,10 +14,15 @@ public class AdminFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
+        AdminRes.InfoDto admin = null;
 
-        if (session == null || !"ADMIN".equals(session.getAttribute("role"))) {
+        if (session != null) {
+            admin = (AdminRes.InfoDto) session.getAttribute("adminInfo");
+        }
+        if (admin == null || !"ADMIN".equals(admin.getRole())) {
             httpResponse.sendRedirect("/login?error");
         }
+
         chain.doFilter(request, response);
     }
 }
