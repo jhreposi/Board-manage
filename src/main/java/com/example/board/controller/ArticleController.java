@@ -1,9 +1,11 @@
 package com.example.board.controller;
 
+import com.example.board.dto.AdminRes;
 import com.example.board.dto.ArticleReqDto;
 import com.example.board.dto.ArticleResDto;
 import com.example.board.model.Article;
 import com.example.board.service.ArticleService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,6 +25,14 @@ import java.util.List;
 @RequestMapping("/")
 public class ArticleController {
     ArticleService articleService;
+
+    @ModelAttribute("adminInfo")
+    public AdminRes.InfoDto adminInfo(HttpSession session) {
+        if (session.getAttribute("adminInfo") != null) {
+            return (AdminRes.InfoDto)session.getAttribute("adminInfo");
+        }
+        return null;
+    }
 
     @GetMapping("notice")
     public String getArticle(Model model) {

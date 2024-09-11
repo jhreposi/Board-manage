@@ -13,12 +13,19 @@
     <div class="layout">
         <div class="top-section">
             <div class="top-left"></div>
-            <div class="top-right">
+            <div th:if="${adminInfo != null}" class="top-right" >
                 <div class="top-right-area1">
-                    님 안녕하세요
+                    <span th:text="${adminInfo.name}"></span>님 안녕하세요
                 </div>
                 <div class="top-right-area2">
-                    로그인아웃
+                    <a href="/logout">로그아웃</a>
+                </div>
+            </div>
+            <div th:unless="${adminInfo != null}" class="top-right">
+                <div class="top-right-area1">
+                </div>
+                <div class="top-right-area2">
+                    <a href="/login">로그인</a>
                 </div>
             </div>
         </div>

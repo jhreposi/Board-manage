@@ -13,6 +13,7 @@ public class Admin {
     private int adminId;
     private String loginId;
     private String password;
+    private String name;
     private final String role = "ADMIN";
 
 

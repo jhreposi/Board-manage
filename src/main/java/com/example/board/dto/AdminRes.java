@@ -11,9 +11,10 @@ public class AdminRes {
     @Setter
     @NoArgsConstructor
     @ToString
-    public static class AdminInfoDto {
+    public static class InfoDto {
         private int adminId;
         private String loginId;
+        private String name;
         private String role;
     }
 }

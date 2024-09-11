@@ -22,7 +22,8 @@
     <select id="selectAdminById" resultType="Admin">
         SELECT
             admin_id,
-            login_id
+            login_id,
+            name
         FROM
             admin
         WHERE
