@@ -1,4 +1,4 @@
-package com.example.board.global;
+package com.example.board.global.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

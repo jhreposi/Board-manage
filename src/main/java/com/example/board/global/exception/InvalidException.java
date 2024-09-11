@@ -1,4 +1,4 @@
-package com.example.board.api;
+package com.example.board.global.exception;
 public class InvalidException extends RuntimeException{
     public InvalidException() {
     }

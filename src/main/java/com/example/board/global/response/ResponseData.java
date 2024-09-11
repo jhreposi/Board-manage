@@ -1,4 +1,4 @@
-package com.example.board.api;
+package com.example.board.global.response;
 
 
 import lombok.Builder;

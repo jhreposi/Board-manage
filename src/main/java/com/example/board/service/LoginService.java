@@ -1,7 +1,7 @@
 package com.example.board.service;
 
-import com.example.board.api.InvalidException;
-import com.example.board.api.ErrorResponseApi;
+import com.example.board.global.exception.InvalidException;
+import com.example.board.global.response.ErrorResponseApi;
 import com.example.board.model.Admin;
 import com.example.board.repository.LoginMapper;
 import lombok.extern.slf4j.Slf4j;

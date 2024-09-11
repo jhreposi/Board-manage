@@ -1,5 +1,7 @@
-package com.example.board.api;
+package com.example.board.global.exception;
 
+import com.example.board.global.response.ErrorResponse;
+import com.example.board.global.response.ErrorResponseApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

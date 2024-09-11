@@ -1,4 +1,4 @@
-package com.example.board.global;
+package com.example.board.global.config;
 
 import com.example.board.dto.AdminRes;
 import jakarta.servlet.*;

@@ -1,7 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.dto.AdminReq;
-import com.example.board.api.ResponseData;
+import com.example.board.global.response.ResponseData;
 import com.example.board.dto.AdminRes;
 import com.example.board.model.Admin;
 import com.example.board.service.EncryptService;
