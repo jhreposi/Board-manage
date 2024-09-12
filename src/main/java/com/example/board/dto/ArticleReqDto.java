@@ -1,5 +1,6 @@
 package com.example.board.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
@@ -8,35 +9,26 @@ import lombok.*;
 @AllArgsConstructor
 public class ArticleReqDto {
 
-    public enum BoardName {
-        // 1:NOTICE, 2:FREE, 3:GALLERY, 4:QUESTION
-        NOTICE(1),
-        FREE(2),
-        GALLERY(3),
-        QUESTION(4)
-        ;
-        private int boardType;
-        BoardName(int boardType) {
-            this.boardType = boardType;
-        }
-        String getBoardNameFrom(int boardType) {
-            for (BoardName value : values()) {
-                if (value.equals(boardType)) {
-                    return value.name();
-                }
-            }
-            throw new RuntimeException("일치하는 게시판 없음");
-        }
-    }
-
     @Getter
     @Setter
     @ToString
-    public class NoticePost {
-        private String title;
-        private String content;
-        private String pinnedYn;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class NoticePost {
+        @Min(value = 1, message = "유효한 카테고리가 아닙니다")
         private int categoryId;
+
+        @NotBlank
+        @Size(max = 100, message = "제목은 최대 100글자입니다")
+        private String title;
+
+        @NotBlank
+        @Size(max = 4000, message = "본문은 최대 4000글자입니다")
+        private String content;
+
+        @Builder.Default
+        private String pinnedYn = "N";
 
     }
 }

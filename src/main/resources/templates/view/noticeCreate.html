@@ -38,82 +38,57 @@
 
         <div class="form-buttons">
             <button type="button" onclick="location.href='/notice'">취소</button>
-            <button type="button" id="saveBtn">저장</button>
+            <button type="submit" id="saveBtn">저장</button>
         </div>
     </form>
 
 <script>
     const saveForm = document.getElementById('saveForm');
     const category = document.getElementById('category');
-    const author = document.getElementById('author');
     const title = document.getElementById('title');
     const content = document.getElementById('content');
-    const pass = document.getElementById('pass');
-    const passCheck = document.getElementById('passCheck')
-    const file = document.getElementById('file');
-    const pathParts = window.location.pathname.split('/');
-    let type = document.getElementById('boardType')
-    type.value = pathParts[1];   // pathParts: /boardType/new
 
-    document.getElementById('saveBtn').addEventListener('click', function () {
-        console.log(saveForm)
-        if(!confirm('등록 하시겠습니까?')) {
+    document.getElementById('saveForm').addEventListener('submit', async function () {
+        if (!confirm('등록 하시겠습니까?')) {
             return;
         }
-        // if (!checkListConfirm()) {
-        //     return;
-        // }
-        saveForm.submit()
-        // fetch('/board/write', {
-        //     method: 'post',
-        //     body: new FormData(saveForm),
-        // }).then(resp => {
-        //     if (resp.ok) {
-        //         alert('게시글이 저장되었습니다')
-        //         window.location.href = '/board/list';
-        //     } else {
-        //         alert('게시글 저장에 실패하였습니다.')
-        //     }
-        // }).catch(error => {
-        //     alert('게시글 저장중 오류발생.')
-        // });
+        if (!isValidForm()) {
+            return;
+        }
+
+        const formData = new FormData(saveForm);
+        const response = await fetch('/notice/create', {
+            method: 'post',
+            body: formData
+        });
+
+        if (response.ok) {
+            alert('게시글이 생성되었습니다')
+            window.location.href = '/notice'
+        } else {
+            console.log('Error creating post');
+        }
+
     })
 
-    function checkListConfirm() {
+    function isValidForm() {
         if (category.value === '0') {
             alert('카테고리 선택은 필수 입니다')
             return false;
         }
-        if (lengthCheck(author, 2, 5)) {
-            alert('작성자는 3글자 이상 5글자미만으로 가능합니다')
+        if (lengthCheck(title, 100)) {
+            alert('제목은 100글자 미만으로 입력해주세요')
             return false;
         }
-        if (pass.value !== passCheck.value) {
-            alert('비밀번호가 일치하지 않습니다')
-            return false;
-        }
-        if (!validatePassword(pass.value)) {
-            alert('비밀번호 규칙을 확인해주세요')
-            return false;
-        }
-        if (lengthCheck(title, 4, 100)) {
-            alert('제목은 4글자이상 100글자 미만으로 입력해주세요')
-            return false;
-        }
-        if (lengthCheck(content, 4, 2000)) {
-            alert('내용은 4글자이상 2000글자 미만으로 입력해주세요')
+        if (lengthCheck(content, 4000)) {
+            alert('내용은 4000글자 미만으로 입력해주세요')
             return false;
         }
         return true;
     }
 
-    function validatePassword(password) {
-        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{4,15}$/;
-        return passwordPattern.test(password);
-    }
-
-    function lengthCheck(target, up, down) {
-        return target.value.length < up || target.value.length > down;
+    function lengthCheck(target, max) {
+        return target.value.length > max;
     }
 </script>
 </div>
