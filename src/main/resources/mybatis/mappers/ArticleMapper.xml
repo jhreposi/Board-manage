@@ -17,6 +17,15 @@
             INNER JOIN category c   ON a.category_id = c.category_id
 
     </select>
+    <select id="selectCategoriesBy" resultType="Category">
+        SELECT
+            category_id,
+            name
+        FROM
+            category
+        WHERE
+            board_type = #{boardType}
+    </select>
 
     <resultMap id="ArticleResultMap" type="Article">
 

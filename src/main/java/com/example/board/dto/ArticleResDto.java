@@ -2,7 +2,7 @@ package com.example.board.dto;
 
 import lombok.*;
 
-public final class ArticleResDto {
+public class ArticleResDto {
     public ArticleResDto() {
     }
     @Getter
@@ -17,5 +17,14 @@ public final class ArticleResDto {
         int viewCount;
         String createdAt;
         String register;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    public static class Category {
+        private int categoryId;
+        private String name;
     }
 }

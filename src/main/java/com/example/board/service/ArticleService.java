@@ -1,6 +1,7 @@
 package com.example.board.service;
 
 import com.example.board.model.Article;
+import com.example.board.model.Category;
 import com.example.board.repository.ArticleMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,10 @@ public class ArticleService {
 
     public List<Article> getArticle() {
         return articleMapper.selectNoticeList();
+    }
+
+    public List<Category> getCategoriesBy(int boardType) {
+        return articleMapper.selectCategoriesBy(boardType);
     }
 
 }
