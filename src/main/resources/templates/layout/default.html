@@ -18,7 +18,7 @@
                     <span th:text="${adminInfo.name}"></span>님 안녕하세요
                 </div>
                 <div class="top-right-area2">
-                    <a href="/logout">로그아웃</a>
+                    <a id="logoutBtn">로그아웃</a>
                 </div>
             </div>
             <div th:unless="${adminInfo != null}" class="top-right">
@@ -41,4 +41,18 @@
         </div>
     </div>
 </body>
+<script>
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+        if(!confirm('로그아웃 하시겠습니까?')) {
+            return
+        }
+        fetch('/logout', {
+            method: 'post'
+        }).then(() => {
+            window.location.href = '/'
+        }).catch(() => {
+            alert('error발생 관리자 문의')
+        })
+    })
+</script>
 </html>

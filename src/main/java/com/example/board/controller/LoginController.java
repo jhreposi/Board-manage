@@ -71,4 +71,12 @@ public class LoginController {
         return ResponseEntity.ok(ResponseData.builder().data(adminInfo).message("로그인 성공").build());
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession httpSession) {
+        httpSession.removeAttribute("adminInfo");
+        httpSession.invalidate();
+        return ResponseEntity.ok("로그아웃 되었습니다");
+//        return "redirect:/notice";
+    }
+
 }
