@@ -17,7 +17,7 @@ public class LoginService {
         this.loginMapper = loginMapper;
     }
 
-    public int getIdByAdmin(Admin admin) {
+    public int getAdminIdByLoginInfo(Admin admin) {
         Optional<Integer> adminId = loginMapper.selectValidAdmin(admin);
         if (adminId.isEmpty()) {
             throw new InvalidException(ErrorResponseApi.INVALIDED_INFO.getMessage());

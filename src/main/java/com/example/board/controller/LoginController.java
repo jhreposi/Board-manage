@@ -6,8 +6,7 @@ import com.example.board.dto.AdminRes;
 import com.example.board.model.Admin;
 import com.example.board.service.EncryptService;
 import com.example.board.service.LoginService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.board.service.SessionHelper;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,11 +23,13 @@ import java.security.PublicKey;
 @Slf4j
 @Controller
 public class LoginController {
+    SessionHelper sessionHelper;
     EncryptService encryptService;
     LoginService loginService;
     ModelMapper modelMapper;
 
-    public LoginController(EncryptService encryptService, LoginService loginService, ModelMapper modelMapper) {
+    public LoginController(SessionHelper sessionHelper,EncryptService encryptService, LoginService loginService, ModelMapper modelMapper) {
+        this.sessionHelper = sessionHelper;
         this.encryptService = encryptService;
         this.loginService = loginService;
         this.modelMapper = modelMapper;
@@ -47,24 +48,20 @@ public class LoginController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseEntity<ResponseData<Object>> loginAction(@RequestBody AdminReq.LoginDto loginDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity<ResponseData<Object>> loginAction(@RequestBody AdminReq.LoginDto loginDto) throws Exception {
         //암호화된 비밀번호 복호화
         String decrypted = encryptService.decrypt(loginDto.getEncryptedPassword());
         loginDto.setPassword(decrypted);
 
         Admin requestAdmin = Admin.from(loginDto);
 
-        int adminId = loginService.getIdByAdmin(requestAdmin);
+        int adminId = loginService.getAdminIdByLoginInfo(requestAdmin);
         Admin responseAdmin = loginService.getAdminById(adminId);
 
         AdminRes.InfoDto adminInfo = modelMapper.map(responseAdmin, AdminRes.InfoDto.class);
-        log.info("admin Info {}", adminInfo);
 
-        HttpSession session = request.getSession(true);
-
-        if (session.isNew()) {
-            session.setAttribute("adminInfo", adminInfo);
-            session.setMaxInactiveInterval(60 * 30); //만료시간 30분
+        if (sessionHelper.getAdminInfo() == null) {
+            sessionHelper.setAdminInfo(adminInfo);
         } else {
             // TODO: 2024-09-10 로그인상태에서 로그인 시도하면 접근제한, 기존세션제거?
         }
@@ -75,8 +72,8 @@ public class LoginController {
     public ResponseEntity<String> logout(HttpSession httpSession) {
         httpSession.removeAttribute("adminInfo");
         httpSession.invalidate();
+
         return ResponseEntity.ok("로그아웃 되었습니다");
-//        return "redirect:/notice";
     }
 
 }
