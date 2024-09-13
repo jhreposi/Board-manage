@@ -11,4 +11,6 @@ public interface ArticleMapper {
     List<Article> selectNoticeList();
 
     List<Category> selectCategoriesBy(int boardType);
+
+    void insertArticle(Article article);
 }

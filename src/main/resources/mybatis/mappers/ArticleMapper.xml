@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.board.repository.ArticleMapper">
-
     <select id="selectNoticeList" resultMap="ArticleResultMap">
         SELECT
             a.article_id,
@@ -26,6 +25,15 @@
         WHERE
             board_type = #{boardType}
     </select>
+
+    <insert id="insertArticle" parameterType="Article">
+        INSERT INTO
+            article
+            ( category_id, member_id, title, content, pinned_yn)
+        VALUES
+            (${category.categoryId}, ${admin.adminId}, #{title}, #{content}, #{pinnedYn})
+    </insert>
+
 
     <resultMap id="ArticleResultMap" type="Article">
 

@@ -63,18 +63,15 @@ public class ArticleController {
 
         return "view/noticeCreate";
     }
+    @ResponseBody
     @PostMapping("notice/create")
-    public ResponseEntity<?> createNotice(@Valid ArticleReqDto.NoticePost request) {
-        // TODO: 2024-09-05 Article로 변환 후 insert
-        /**
-         * 게시글 등록할때의 사용자 정보를 매변 dto에 담아오기보다는 로그인시 세션으로 인스턴스화?해서
-         * 로그인 정보는 바로 가져오자
-         * id, name
-         */
-        log.info("article request => {}", request.toString());
+    public ResponseEntity<String> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
+        noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 
+        Article article = Article.from(noticeRequest);
+        articleService.createArticle(article);
 
-        return ResponseEntity.ok(null   );
+        return ResponseEntity.ok("게시글 생성");
     }
 
 }

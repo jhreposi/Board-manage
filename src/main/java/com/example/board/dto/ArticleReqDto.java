@@ -30,5 +30,7 @@ public class ArticleReqDto {
         @Builder.Default
         private String pinnedYn = "N";
 
+        private int adminId;
+
     }
 }

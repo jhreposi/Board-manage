@@ -1,5 +1,6 @@
 package com.example.board.model;
 
+import com.example.board.dto.ArticleReqDto;
 import lombok.*;
 
 @Getter
@@ -21,6 +22,18 @@ public class Article {
 
     @ToString.Include
     private Category category;
+    private Admin admin;
+
+    public static Article from(ArticleReqDto.NoticePost dto) {
+        Article article = Article.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .pinnedYn(dto.getPinnedYn())
+                .admin(Admin.builder().adminId(dto.getAdminId()).build())
+                .category(Category.builder().categoryId(dto.getCategoryId()).build())
+                .build();
+        return article;
+    }
 
 
 }

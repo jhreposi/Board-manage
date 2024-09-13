@@ -6,7 +6,7 @@
 <div layout:fragment="content">
     <h2>공지사항 관리</h2>
 
-    <form method="post" id="saveForm" action="/notice/create">
+    <form id="saveForm">
         <div class="form-row">
             <label for="category">분류</label>
             <select name="categoryId" id="category">
@@ -32,10 +32,6 @@
             <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn">
         </div>
 
-        <div>
-            <input type="hidden" name="boardType" value="" id="boardType">
-        </div>
-
         <div class="form-buttons">
             <button type="button" onclick="location.href='/notice'">취소</button>
             <button type="submit" id="saveBtn">저장</button>
@@ -48,7 +44,10 @@
     const title = document.getElementById('title');
     const content = document.getElementById('content');
 
-    document.getElementById('saveForm').addEventListener('submit', async function () {
+    document.getElementById('saveForm').addEventListener('submit', async function (event) {
+        //submit이벤트로 보내는거면 기본 submit동작을 못하게해야한다
+        event.preventDefault();
+
         if (!confirm('등록 하시겠습니까?')) {
             return;
         }
@@ -68,7 +67,6 @@
         } else {
             console.log('Error creating post');
         }
-
     })
 
     function isValidForm() {

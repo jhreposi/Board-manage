@@ -23,4 +23,7 @@ public class ArticleService {
         return articleMapper.selectCategoriesBy(boardType);
     }
 
+    public void createArticle(Article article) {
+        articleMapper.insertArticle(article);
+    }
 }
