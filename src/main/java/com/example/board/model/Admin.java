@@ -14,8 +14,6 @@ public class Admin {
     private String loginId;
     private String password;
     private String name;
-    private final String role = "ADMIN";
-
 
     public static Admin from(AdminReq.LoginDto loginDto) {
         return Admin.builder()

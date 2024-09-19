@@ -17,14 +17,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Controller
 @Slf4j
-public class ArticleController {
+@Controller
+public class NoticeController {
     SessionHelper sessionHelper;
     ArticleService articleService;
     ModelMapper modelMapper;
 
-    public ArticleController(SessionHelper sessionHelper, ArticleService articleService, ModelMapper modelMapper) {
+    public NoticeController(SessionHelper sessionHelper, ArticleService articleService, ModelMapper modelMapper) {
         this.sessionHelper = sessionHelper;
         this.articleService = articleService;
         this.modelMapper = modelMapper;
@@ -48,8 +48,11 @@ public class ArticleController {
         return "view/notice";
     }
 
-    @GetMapping("/admin/notice/new")
+    @GetMapping("/notice/new")
     public String createNotice(Model model) {
+        if (sessionHelper.getAdminInfo() == null) {
+            return "redirect:/login";
+        }
         int boardType = BoardName.NOTICE.getBoardType();
         List<Category> categoryList = articleService.getCategoriesBy(boardType);
 
@@ -63,7 +66,7 @@ public class ArticleController {
         return "view/noticeCreate";
     }
     @ResponseBody
-    @PostMapping("/notice/create")
+    @PostMapping("/notice/new")
     public ResponseEntity<String> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
         noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 

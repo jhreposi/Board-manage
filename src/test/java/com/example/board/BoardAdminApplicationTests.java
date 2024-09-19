@@ -11,11 +11,4 @@ class BoardAdminApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    public void mapping(ArticleMapper mapper) {
-        mapper.selectNoticeList().stream().forEach(article -> {
-            System.out.println(article.toString());
-        });
-    }
-
 }

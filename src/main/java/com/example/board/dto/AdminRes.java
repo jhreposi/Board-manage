@@ -15,6 +15,5 @@ public class AdminRes {
         private int adminId;
         private String loginId;
         private String name;
-        private String role;
     }
 }
