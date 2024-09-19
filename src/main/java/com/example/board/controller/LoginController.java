@@ -57,21 +57,25 @@ public class LoginController {
 
         int adminId = loginService.getAdminIdByLoginInfo(requestAdmin);
         Admin responseAdmin = loginService.getAdminById(adminId);
-
         AdminRes.InfoDto adminInfo = modelMapper.map(responseAdmin, AdminRes.InfoDto.class);
 
-        if (sessionHelper.getAdminInfo() == null) {
-            sessionHelper.setAdminInfo(adminInfo);
-        } else {
-            // TODO: 2024-09-10 로그인상태에서 로그인 시도하면 접근제한, 기존세션제거?
+        if (sessionHelper.getAdminInfo() != null) {
+            sessionHelper.removeAdminInfo();
         }
-        return ResponseEntity.ok(ResponseData.builder().data(adminInfo).message("로그인 성공").build());
+        sessionHelper.setAdminInfo(responseAdmin);
+
+        ResponseData<Object> response = ResponseData.builder()
+                .result(true)
+                .data(adminInfo)
+                .message("로그인 성공")
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession httpSession) {
-        httpSession.removeAttribute("adminInfo");
-        httpSession.invalidate();
+    public ResponseEntity<String> logout() {
+        sessionHelper.removeAdminInfo();
 
         return ResponseEntity.ok("로그아웃 되었습니다");
     }

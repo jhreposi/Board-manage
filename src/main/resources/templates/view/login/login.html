@@ -50,7 +50,9 @@
         }).then(resp => {
             return resp.json()
         }).then(data => {
-            if (data.result === false) {
+            if (data.result === true) {
+                sessionStorage.setItem('adminInfo', JSON.stringify(data.data))
+            } else {
                 alert(data.message)
                 document.getElementById('loginId').value = '';
                 document.getElementById('password').value = '';

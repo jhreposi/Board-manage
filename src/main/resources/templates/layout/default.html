@@ -13,15 +13,15 @@
     <div class="layout">
         <div class="top-section">
             <div class="top-left"></div>
-            <div th:if="${adminInfo != null}" class="top-right" >
+            <div class="top-right" id="logined">
                 <div class="top-right-area1">
-                    <span th:text="${adminInfo.name}"></span>님 안녕하세요
+                    <span id="name"></span>님 안녕하세요
                 </div>
                 <div class="top-right-area2">
                     <a id="logoutBtn">로그아웃</a>
                 </div>
             </div>
-            <div th:unless="${adminInfo != null}" class="top-right">
+            <div class="top-right" id="login">
                 <div class="top-right-area1">
                 </div>
                 <div class="top-right-area2">
@@ -44,8 +44,10 @@
 <script>
     document.getElementById('logoutBtn').addEventListener('click', function () {
         if(!confirm('로그아웃 하시겠습니까?')) {
-            return
+            return;
         }
+        sessionStorage.removeItem('adminInfo')
+
         fetch('/logout', {
             method: 'post'
         }).then(() => {
@@ -53,6 +55,15 @@
         }).catch(() => {
             alert('error발생 관리자 문의')
         })
+    })
+    document.addEventListener('DOMContentLoaded', function () {
+        const adminInfo = JSON.parse(sessionStorage.getItem('adminInfo'))
+        if (adminInfo != null) {
+            document.getElementById('name').textContent = adminInfo.name;
+            document.getElementById('login').remove();
+        } else {
+            document.getElementById('logined').remove();
+        }
     })
 </script>
 </html>

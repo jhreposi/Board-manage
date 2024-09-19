@@ -1,6 +1,7 @@
 package com.example.board.service;
 
 import com.example.board.dto.AdminRes;
+import com.example.board.model.Admin;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -15,12 +16,17 @@ public class SessionHelper {
         this.httpSession = httpSession;
     }
 
-    public void setAdminInfo(AdminRes.InfoDto adminInfo) {
+    public void setAdminInfo(Admin adminInfo) {
         httpSession.setAttribute("adminInfo", adminInfo);
         httpSession.setMaxInactiveInterval(60 * 30); //만료시간 30분
     }
 
-    public AdminRes.InfoDto getAdminInfo() {
-        return (AdminRes.InfoDto) httpSession.getAttribute("adminInfo");
+    public Admin getAdminInfo() {
+        return (Admin) httpSession.getAttribute("adminInfo");
+    }
+
+    public void removeAdminInfo() {
+        httpSession.removeAttribute("adminInfo");
+        httpSession.invalidate();
     }
 }

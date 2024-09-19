@@ -3,6 +3,7 @@ package com.example.board.controller;
 import com.example.board.dto.AdminRes;
 import com.example.board.dto.ArticleReqDto;
 import com.example.board.dto.ArticleResDto;
+import com.example.board.model.Admin;
 import com.example.board.model.Article;
 import com.example.board.model.BoardName;
 import com.example.board.model.Category;
@@ -28,12 +29,6 @@ public class NoticeController {
         this.sessionHelper = sessionHelper;
         this.articleService = articleService;
         this.modelMapper = modelMapper;
-    }
-
-    @ModelAttribute("/adminInfo")
-    public AdminRes.InfoDto adminInfo() {
-        AdminRes.InfoDto adminInfo = sessionHelper.getAdminInfo();
-        return adminInfo;
     }
 
     @GetMapping("/notice")

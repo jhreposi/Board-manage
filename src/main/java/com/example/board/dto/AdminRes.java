@@ -12,7 +12,6 @@ public class AdminRes {
     @NoArgsConstructor
     @ToString
     public static class InfoDto {
-        private int adminId;
         private String loginId;
         private String name;
     }
