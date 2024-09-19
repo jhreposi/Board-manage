@@ -16,7 +16,7 @@
         <tr th:each="article : ${articles}">
             <td th:text="${article.categoryName}"></td>
             <td style="text-align: left">
-                <a th:href="@{/board/view/{id}(id=${article.articleId})}">
+                <a th:href="@{/notice/{id}(id=${article.articleId})}">
                     <span th:text="${article.title}"></span>
                 </a>
             </td>

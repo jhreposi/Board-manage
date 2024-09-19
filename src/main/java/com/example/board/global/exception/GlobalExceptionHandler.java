@@ -48,4 +48,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
+    @ExceptionHandler(ContentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> contentNotFoundException(ContentNotFoundException e) {
+        log.info("ContentNotFoundException => {}", e.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(ErrorResponseApi.CONTENT_NOT_FOUND.getCode())
+                .message(ErrorResponseApi.CONTENT_NOT_FOUND.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
 }

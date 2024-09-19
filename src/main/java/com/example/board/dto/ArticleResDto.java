@@ -3,8 +3,6 @@ package com.example.board.dto;
 import lombok.*;
 
 public class ArticleResDto {
-    public ArticleResDto() {
-    }
     @Getter
     @Setter
     @NoArgsConstructor
@@ -26,5 +24,21 @@ public class ArticleResDto {
     public static class Category {
         private int categoryId;
         private String name;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @ToString
+    public static class ArticleDetail {
+        private int articleId;
+        private String title;
+        private String content;
+        private int viewCount;
+        private String createdAt;
+        private String updatedAt;
+
+        private String categoryName;
+        private String adminName;
     }
 }

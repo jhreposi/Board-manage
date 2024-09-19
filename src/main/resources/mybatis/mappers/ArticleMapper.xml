@@ -10,7 +10,7 @@
             a.created_at,
             a.updated_at,
             c.category_id,
-            c.name,
+            c.name AS categoryName,
             c.board_type
         FROM article a
             INNER JOIN category c   ON a.category_id = c.category_id
@@ -25,11 +25,28 @@
         WHERE
             board_type = #{boardType}
     </select>
+    <select id="selectArticleById" resultMap="ArticleResultMap">
+        SELECT
+            a.article_id,
+            a.title,
+            a.content,
+            a.view_count,
+            a.created_at,
+            a.updated_at,
+            c.name AS categoryName,
+            ad.name AS adminName
+        FROM
+            article a
+            INNER JOIN category c ON  a.category_id = c.category_id
+        INNER JOIN admin ad ON a.admin_id = ad.admin_id
+        WHERE
+            article_id = #{articleId}
+    </select>
 
     <insert id="insertArticle" parameterType="Article">
         INSERT INTO
             article
-            ( category_id, member_id, title, content, pinned_yn)
+            ( category_id, admin_id, title, content, pinned_yn)
         VALUES
             (${category.categoryId}, ${admin.adminId}, #{title}, #{content}, #{pinnedYn})
     </insert>
@@ -49,7 +66,11 @@
         <association property="category" javaType="Category">
             <id property="categoryId" column="category_id"/>
             <result property="boardType" column="board_type"/>
-            <result property="name" column="name"/>
+            <result property="name" column="categoryName"/>
+        </association>
+        <association property="admin" javaType="Admin">
+            <id property="adminId" column="admin_id"/>
+            <result property="name" column="adminName"/>
         </association>
     </resultMap>
 </mapper>

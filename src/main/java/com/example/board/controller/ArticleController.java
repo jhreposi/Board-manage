@@ -15,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
 public class ArticleController {
     SessionHelper sessionHelper;
     ArticleService articleService;
@@ -32,12 +30,13 @@ public class ArticleController {
         this.modelMapper = modelMapper;
     }
 
-    @ModelAttribute("adminInfo")
+    @ModelAttribute("/adminInfo")
     public AdminRes.InfoDto adminInfo() {
-        return sessionHelper.getAdminInfo();
+        AdminRes.InfoDto adminInfo = sessionHelper.getAdminInfo();
+        return adminInfo;
     }
 
-    @GetMapping("notice")
+    @GetMapping("/notice")
     public String getArticle(Model model) {
         List<Article> article = articleService.getArticle();
 
@@ -49,7 +48,7 @@ public class ArticleController {
         return "view/notice";
     }
 
-    @GetMapping("admin/notice/new")
+    @GetMapping("/admin/notice/new")
     public String createNotice(Model model) {
         int boardType = BoardName.NOTICE.getBoardType();
         List<Category> categoryList = articleService.getCategoriesBy(boardType);
@@ -64,7 +63,7 @@ public class ArticleController {
         return "view/noticeCreate";
     }
     @ResponseBody
-    @PostMapping("notice/create")
+    @PostMapping("/notice/create")
     public ResponseEntity<String> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
         noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 
@@ -72,6 +71,15 @@ public class ArticleController {
         articleService.createArticle(article);
 
         return ResponseEntity.ok("게시글 생성");
+    }
+
+    @GetMapping("/notice/{articleId}")
+    public String getNoticeDetail(@PathVariable("articleId") int articleId, Model model) {
+        Article article = articleService.getArticleDetail(articleId);
+        ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
+
+        model.addAttribute("article", articleDetail);
+        return "view/noticeDetail";
     }
 
 }
