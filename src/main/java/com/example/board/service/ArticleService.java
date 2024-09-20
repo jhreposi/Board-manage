@@ -44,4 +44,8 @@ public class ArticleService {
     public void modifyArticle(Article article) {
         articleMapper.updateArticle(article);
     }
+
+    public void removeArticle(int articleId) {
+        articleMapper.deleteArticleBy(articleId);
+    }
 }

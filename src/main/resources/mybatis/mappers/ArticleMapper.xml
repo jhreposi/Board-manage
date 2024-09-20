@@ -68,6 +68,12 @@
             article_id = #{articleId}
     </update>
 
+    <delete id="deleteArticleBy">
+        DELETE FROM
+                article
+        WHERE
+            article_id = #{articleId}
+    </delete>
 
 
     <resultMap id="ArticleResultMap" type="Article">

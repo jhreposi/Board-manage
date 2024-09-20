@@ -44,7 +44,7 @@
 
         <div class="form-buttons">
             <button type="button" onclick="location.href='/notice'">취소</button>
-            <button type="submit" id="saveBtn">저장</button>
+            <button type="submit" id="saveBtn" th:text="${article == null ? '등록' : '수정'}"></button>
         </div>
     </form>
 

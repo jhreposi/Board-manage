@@ -18,4 +18,6 @@ public interface ArticleMapper {
     Optional<Article> selectArticleById(int articleId);
 
     void updateArticle(Article article);
+
+    void deleteArticleBy(int articleId);
 }

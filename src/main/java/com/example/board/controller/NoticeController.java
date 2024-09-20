@@ -11,6 +11,7 @@ import com.example.board.service.SessionHelper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,6 +102,18 @@ public class NoticeController {
 
         model.addAttribute("article", articleDetail);
         return "view/noticeDetail";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/notice")
+    public ResponseEntity<Void> removeNotice(
+            @ModelAttribute(value = "articleId") int articleId) {
+        if (sessionHelper.getAdminInfo() == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        articleService.removeArticle(articleId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
