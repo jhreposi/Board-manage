@@ -3,28 +3,29 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 <div layout:fragment="content">
-<article>
-    <a href="/notice/form">등록</a>
-    <table>
-        <tr>
-            <td>분류</td>
-            <td>제목</td>
-            <td>조회수</td>
-            <td>등록 일시</td>
-            <td>작성자</td>
-        </tr>
-        <tr th:each="article : ${articles}">
-            <td th:text="${article.categoryName}"></td>
-            <td style="text-align: left">
-                <a th:href="@{/notice/{id}(id=${article.articleId})}">
-                    <span th:text="${article.title}"></span>
-                </a>
-            </td>
-            <td th:text="${article.viewCount}"></td>
-            <td th:text="${article.createdAt}"></td>
-            <td th:text="${article.adminName}"></td>
-        </tr>
-    </table>
-</article>
+    <div th:replace="~{view/searchBox :: searchBox(categories=${categories})}"></div>
+    <article>
+        <a href="/notice/form">등록</a>
+        <table>
+            <tr>
+                <td>분류</td>
+                <td>제목</td>
+                <td>조회수</td>
+                <td>등록 일시</td>
+                <td>작성자</td>
+            </tr>
+            <tr th:each="article : ${articles}">
+                <td th:text="${article.categoryName}"></td>
+                <td style="text-align: left">
+                    <a th:href="@{/notice/{id}(id=${article.articleId})}">
+                        <span th:text="${article.title}"></span>
+                    </a>
+                </td>
+                <td th:text="${article.viewCount}"></td>
+                <td th:text="${article.createdAt}"></td>
+                <td th:text="${article.adminName}"></td>
+            </tr>
+        </table>
+    </article>
 </div>
 </html>

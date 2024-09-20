@@ -19,15 +19,6 @@ public class ArticleResDto {
 
     @Getter
     @Setter
-    @ToString
-    @NoArgsConstructor
-    public static class Category {
-        private int categoryId;
-        private String name;
-    }
-
-    @Getter
-    @Setter
     @NoArgsConstructor
     @ToString
     public static class ArticleDetail {

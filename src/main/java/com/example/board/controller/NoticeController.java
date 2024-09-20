@@ -2,10 +2,10 @@ package com.example.board.controller;
 
 import com.example.board.dto.ArticleReqDto;
 import com.example.board.dto.ArticleResDto;
+import com.example.board.dto.CategoryDto;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.BoardName;
-import com.example.board.model.Category;
 import com.example.board.service.ArticleService;
 import com.example.board.service.SessionHelper;
 import jakarta.validation.Valid;
@@ -20,12 +20,13 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class NoticeController {
+public class NoticeController extends ArticleController {
     SessionHelper sessionHelper;
     ArticleService articleService;
     ModelMapper modelMapper;
 
     public NoticeController(SessionHelper sessionHelper, ArticleService articleService, ModelMapper modelMapper) {
+        super(articleService, modelMapper);
         this.sessionHelper = sessionHelper;
         this.articleService = articleService;
         this.modelMapper = modelMapper;
@@ -34,12 +35,14 @@ public class NoticeController {
     @GetMapping("/notice")
     public String getArticle(Model model) {
         List<Article> article = articleService.getArticle();
+        List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
 
         List<ArticleResDto.NoticeList> notices = article.stream().map(notice -> modelMapper
                         .map(notice, ArticleResDto.NoticeList.class))
                         .toList();
 
         model.addAttribute("articles", notices);
+        model.addAttribute("categories", categories);
         return "view/notice";
     }
 
@@ -48,13 +51,7 @@ public class NoticeController {
         if (sessionHelper.getAdminInfo() == null) {
             return "redirect:/login";
         }
-        int boardType = BoardName.NOTICE.getBoardType();
-        List<Category> categoryList = articleService.getCategoriesBy(boardType);
-
-        List<ArticleResDto.Category> categories = categoryList.stream()
-                .map(category -> modelMapper
-                        .map(category, ArticleResDto.Category.class))
-                .toList();
+        List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
 
         model.addAttribute("categories", categories);
 
