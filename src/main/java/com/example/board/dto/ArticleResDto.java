@@ -14,7 +14,7 @@ public class ArticleResDto {
         String title;
         int viewCount;
         String createdAt;
-        String register;
+        String adminName;
     }
 
     @Getter

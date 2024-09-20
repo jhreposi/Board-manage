@@ -11,9 +11,11 @@
             a.updated_at,
             c.category_id,
             c.name AS categoryName,
-            c.board_type
+            c.board_type,
+            ad.name AS adminName
         FROM article a
             INNER JOIN category c   ON a.category_id = c.category_id
+                INNER JOIN admin ad ON a.admin_id = ad.admin_id
 
     </select>
     <select id="selectCategoriesBy" resultType="Category">
@@ -40,7 +42,7 @@
         FROM
             article a
             INNER JOIN category c ON  a.category_id = c.category_id
-        INNER JOIN admin ad ON a.admin_id = ad.admin_id
+                INNER JOIN admin ad ON a.admin_id = ad.admin_id
         WHERE
             article_id = #{articleId}
     </select>
