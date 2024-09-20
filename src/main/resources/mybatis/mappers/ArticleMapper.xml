@@ -45,7 +45,7 @@
             article_id = #{articleId}
     </select>
 
-    <insert id="insertArticle" parameterType="Article">
+    <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
         INSERT INTO
             article
             ( category_id, admin_id, title, content, pinned_yn)
@@ -53,7 +53,7 @@
             (${category.categoryId}, ${admin.adminId}, #{title}, #{content}, #{pinnedYn})
     </insert>
 
-    <update id="updateArticle" parameterType="Article">
+    <update id="updateArticle" parameterType="Article" >
         UPDATE
             article
         SET

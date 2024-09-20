@@ -71,20 +71,23 @@ public class NoticeController {
         noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 
         Article article = Article.from(noticeRequest);
-        boolean isNewArticle = noticeRequest.getAdminId() == 0;
+        // 새글 작성시에는 form에 name값이 articleId인 input 태그가 없어 기본생성자로 0이된다
+        boolean isNewArticle = noticeRequest.getArticleId() == 0;
 
+        int responseArticleId = 0;
         String message = null;
 
         if (isNewArticle) {
-            articleService.createArticle(article);
+            responseArticleId = articleService.createArticle(article);
             message = "게시글 생성 완료";
         } else {
             articleService.modifyArticle(article);
+            responseArticleId = noticeRequest.getArticleId();
             message = "게시글 수정 완료";
         }
         ResponseData<Object> response = ResponseData.builder()
                 .result(true)
-                .data(article.getArticleId())
+                .data(responseArticleId)
                 .message(message)
                 .build();
 
@@ -95,7 +98,6 @@ public class NoticeController {
     public String getNoticeDetail(@PathVariable("articleId") int articleId, Model model) {
         Article article = articleService.getArticleDetail(articleId);
         ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
-        log.info("view info {}", articleDetail.toString());
 
         model.addAttribute("article", articleDetail);
         return "view/noticeDetail";
