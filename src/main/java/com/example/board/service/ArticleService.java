@@ -37,4 +37,8 @@ public class ArticleService {
         return article.get();
 
     }
+
+    public void modifyArticle(Article article) {
+        articleMapper.updateArticle(article);
+    }
 }

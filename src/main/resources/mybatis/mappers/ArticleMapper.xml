@@ -33,7 +33,9 @@
             a.view_count,
             a.created_at,
             a.updated_at,
+            a.pinned_yn,
             c.name AS categoryName,
+            c.category_id,
             ad.name AS adminName
         FROM
             article a
@@ -50,6 +52,20 @@
         VALUES
             (${category.categoryId}, ${admin.adminId}, #{title}, #{content}, #{pinnedYn})
     </insert>
+
+    <update id="updateArticle" parameterType="Article">
+        UPDATE
+            article
+        SET
+            category_id = ${category.categoryId},
+            admin_id = ${admin.adminId},
+            title = #{title},
+            content = #{content},
+            pinned_yn = #{pinnedYn}
+        WHERE
+            article_id = #{articleId}
+    </update>
+
 
 
     <resultMap id="ArticleResultMap" type="Article">

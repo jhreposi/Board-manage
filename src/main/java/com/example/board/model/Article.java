@@ -26,6 +26,7 @@ public class Article {
 
     public static Article from(ArticleReqDto.NoticePost dto) {
         Article article = Article.builder()
+                .articleId(dto.getArticleId())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .pinnedYn(dto.getPinnedYn())

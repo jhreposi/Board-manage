@@ -27,5 +27,8 @@
 
     <div th:text="${article.content}" style="border: 1px solid #ccc; padding: 10px; width: 96%; height: 150px;">
     </div>
+    <div>
+        <a th:href="@{/notice/form(articleId = ${article.articleId})}">수정</a>
+    </div>
 </div>
 </html>

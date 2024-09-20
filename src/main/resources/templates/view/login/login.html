@@ -11,9 +11,9 @@
         <h2>로그인</h2>
         <div class="grid">
             <form method="post" action="/login" id="saveForm">
-                <input type="text" name="loginId" id="loginId" placeholder="아이디" value="asd" />
-                <input type="password" id="password" placeholder="비밀번호" value="1234"/>
-                <input type="hidden" name="encryptedPassword" id="encryptedPassword"  />
+                <input type="text" name="loginId" id="loginId" placeholder="아이디" />
+                <input type="password" id="password" placeholder="비밀번호" />
+                <input type="hidden" name="encryptedPassword" id="encryptedPassword" />
                 <input type="hidden" th:value="${publicKey}" id="publicKey">
 
                 <button type="button" id="formBtn">로그인</button>

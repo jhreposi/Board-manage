@@ -1,9 +1,8 @@
 package com.example.board.controller;
 
-import com.example.board.dto.AdminRes;
 import com.example.board.dto.ArticleReqDto;
 import com.example.board.dto.ArticleResDto;
-import com.example.board.model.Admin;
+import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.BoardName;
 import com.example.board.model.Category;
@@ -43,8 +42,8 @@ public class NoticeController {
         return "view/notice";
     }
 
-    @GetMapping("/notice/new")
-    public String createNotice(Model model) {
+    @GetMapping("/notice/form")
+    public String createNotice(Model model, @RequestParam(value = "articleId", required = false) Integer articleId) {
         if (sessionHelper.getAdminInfo() == null) {
             return "redirect:/login";
         }
@@ -58,23 +57,45 @@ public class NoticeController {
 
         model.addAttribute("categories", categories);
 
+        if (articleId != null) {
+            Article article = articleService.getArticleDetail(articleId);
+            ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
+            model.addAttribute("article", articleDetail);
+        }
+
         return "view/noticeCreate";
     }
     @ResponseBody
-    @PostMapping("/notice/new")
-    public ResponseEntity<String> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
+    @PostMapping("/notice/form")
+    public ResponseEntity<ResponseData<Object>> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
         noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 
         Article article = Article.from(noticeRequest);
-        articleService.createArticle(article);
+        boolean isNewArticle = noticeRequest.getAdminId() == 0;
 
-        return ResponseEntity.ok("게시글 생성");
+        String message = null;
+
+        if (isNewArticle) {
+            articleService.createArticle(article);
+            message = "게시글 생성 완료";
+        } else {
+            articleService.modifyArticle(article);
+            message = "게시글 수정 완료";
+        }
+        ResponseData<Object> response = ResponseData.builder()
+                .result(true)
+                .data(article.getArticleId())
+                .message(message)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/notice/{articleId}")
     public String getNoticeDetail(@PathVariable("articleId") int articleId, Model model) {
         Article article = articleService.getArticleDetail(articleId);
         ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
+        log.info("view info {}", articleDetail.toString());
 
         model.addAttribute("article", articleDetail);
         return "view/noticeDetail";

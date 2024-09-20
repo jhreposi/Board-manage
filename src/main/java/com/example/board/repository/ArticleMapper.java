@@ -16,4 +16,6 @@ public interface ArticleMapper {
     void insertArticle(Article article);
 
     Optional<Article> selectArticleById(int articleId);
+
+    void updateArticle(Article article);
 }

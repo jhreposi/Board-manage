@@ -32,9 +32,11 @@ public class ArticleResDto {
     @ToString
     public static class ArticleDetail {
         private int articleId;
+        private int categoryId;
         private String title;
         private String content;
         private int viewCount;
+        private String pinnedYn;
         private String createdAt;
         private String updatedAt;
 

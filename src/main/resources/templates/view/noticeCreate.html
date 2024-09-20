@@ -12,25 +12,35 @@
             <select name="categoryId" id="category">
                 <option value=0>카테고리 선택</option>
                 <option th:each="category : ${categories}"
-                        th:value="${category.categoryId}" th:text="${category.name}"
+                        th:value="${category.categoryId}"
+                        th:text="${category.name}"
+                        th:attr="selected = ${article != null and article.categoryId == category.categoryId}"
                 ></option>
             </select>
         </div>
 
         <div class="form-row">
             <label for="title">제목</label>
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title"
+                   th:value="${article == null ? '' : article.title}">
         </div>
 
         <div class="form-row">
             <label for="content">내용</label>
-            <textarea type="text" name="content" id="content"></textarea>
+            <textarea type="text" name="content" id="content"
+                      th:text="${article == null ? '' : article.content}"
+            ></textarea>
         </div>
 
         <div>
             <label for="pinnedYn">상단 고정</label>
-            <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn">
+            <input type="checkbox" value="Y" name="pinnedYn" id="pinnedYn"
+                   th:attr="checked=${article != null and article.pinnedYn == 'Y'}">
         </div>
+            <input type="hidden"
+                   th:if="${article != null}"
+                   th:value="${article.articleId}"
+                   name="articleId">
 
         <div class="form-buttons">
             <button type="button" onclick="location.href='/notice'">취소</button>
@@ -56,16 +66,16 @@
         }
 
         const formData = new FormData(saveForm);
-        const response = await fetch('/notice/new', {
+        const response = await fetch('/notice/form', {
             method: 'post',
             body: formData
         });
-
         if (response.ok) {
-            alert('게시글이 생성되었습니다')
-            window.location.href = '/notice'
+            const data = await response.json();
+            alert(data.message)
+            window.location.href = `/notice/${data.data}`
         } else {
-            console.log('Error creating post');
+            console.error('Error creating post');
         }
     })
 

@@ -16,6 +16,8 @@ public class ArticleReqDto {
     @AllArgsConstructor
     @Builder
     public static class NoticePost {
+        private int articleId;
+
         @Min(value = 1, message = "유효한 카테고리가 아닙니다")
         private int categoryId;
 
