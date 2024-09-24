@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.dto.SearchRequest;
 import com.example.board.global.exception.ContentNotFoundException;
 import com.example.board.model.Article;
 import com.example.board.model.Category;
@@ -17,8 +18,8 @@ public class ArticleService {
         this.articleMapper = articleMapper;
     }
 
-    public List<Article> getArticle() {
-        return articleMapper.selectNoticeList();
+    public List<Article> getArticle(SearchRequest searchRequest) {
+        return articleMapper.selectArticleList(searchRequest);
     }
 
     public List<Category> getCategoriesBy(int boardType) {

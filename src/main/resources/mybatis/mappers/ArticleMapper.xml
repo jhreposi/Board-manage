@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.board.repository.ArticleMapper">
-    <select id="selectNoticeList" resultMap="ArticleResultMap">
+    <select id="selectArticleList" resultMap="ArticleResultMap" parameterType="com.example.board.dto.SearchRequest">
         SELECT
             a.article_id,
             a.title,
@@ -16,6 +16,22 @@
         FROM article a
             INNER JOIN category c   ON a.category_id = c.category_id
                 INNER JOIN admin ad ON a.admin_id = ad.admin_id
+        WHERE
+            1=1
+        <if test='category != null and category != "" '>
+            AND
+                a.category_id = #{category}
+        </if>
+        <if test='keyword != null and keyword != "" '>
+            AND
+                (title LIKE CONCAT('%', #{keyword}, '%')
+                OR ad.name LIKE CONCAT('%', #{keyword}, '%')
+                OR content LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+            AND
+                a.created_at BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
+        ORDER BY
+            ${sortByName} ${sortOrder}
 
     </select>
     <select id="selectCategoriesBy" resultType="Category">

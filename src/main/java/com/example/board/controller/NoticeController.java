@@ -3,6 +3,7 @@ package com.example.board.controller;
 import com.example.board.dto.ArticleReqDto;
 import com.example.board.dto.ArticleResDto;
 import com.example.board.dto.CategoryDto;
+import com.example.board.dto.SearchRequest;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.BoardName;
@@ -33,8 +34,10 @@ public class NoticeController extends ArticleController {
     }
 
     @GetMapping("/notice")
-    public String getArticle(Model model) {
-        List<Article> article = articleService.getArticle();
+    public String getArticle(SearchRequest searchRequest, Model model) {
+        searchRequest.defaultSearchValue();
+
+        List<Article> article = articleService.getArticle(searchRequest);
         List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
 
         List<ArticleResDto.NoticeList> notices = article.stream().map(notice -> modelMapper

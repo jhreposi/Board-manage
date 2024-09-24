@@ -24,8 +24,12 @@ mybatis:
 logging:
   level:
     jdbc:
-      sqlonly: trace
+      sqlonly: off
       audit: off
       resultset: off
+      resultsettable: info
       connection: off
-      sqltiming: off
+      sqltiming: info
+    com:
+      example:
+        board: info
