@@ -5,7 +5,7 @@
     <div id="prevPage"> 이전 </div>
 
     <div id="pageNav-container">
-        <span th:each="num : ${#numbers.sequence(page.startNum, page.endNum)}">
+        <span th:if="${page.endNum} != 0" th:each="num : ${#numbers.sequence(page.startNum, page.endNum)}">
             <span th:text="${num}" onclick="linkPage(event)"></span>
         </span>
     </div>

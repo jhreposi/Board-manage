@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <body>
-    <div th:fragment="searchBox(categories)">
+    <div th:fragment="searchBox(categories, search)">
         <div th:if="${categories != null}">
             <form id="searchForm" class="card-group flex-column gap-lg-2">
                 <div class="col-12">
                     <label for="searchDate">일시</label>
-                        <input type="date" name="startDate" id="searchDate">
+                        <input th:value="${search.startDate}" type="date" name="startDate" id="searchDate">
 
                     <label for="endDate">&nbsp~</label>
-                        <input type="date" name="endDate" id="endDate">
+                        <input th:value="${search.endDate}" type="date" name="endDate" id="endDate">
 
                     <label for="searchCategory" class="caption"></label>
                         <select name="category" id="searchCategory">
                             <option value="">전체 카테고리</option>
                             <option th:each="category : ${categories}"
                                     th:value="${category.categoryId}"
+                                    th:selected="${category.categoryId} == ${search.category}"
                                     th:text="${category.name}">
                             </option>
                         </select>
 
                     <label>
-                        <input type="text" name="keyword"/>
+                        <input th:value="${search.keyword}" type="text" name="keyword"/>
                     </label>
 
                     <button type="button" id="searchBtn">검색</button>
                 </div>
                 <div class="flex-row justify-content-between col-12">
-                    <label>
-                        <select name="perPage">
-                            <option selected value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
+                    <label for="itemPerPage">
+                        <select name="perPage" id="itemPerPage">
+                            <option th:selected="${search.perPage} == 10" value="10">10</option>
+                            <option th:selected="${search.perPage} == 20" value="20">20</option>
+                            <option th:selected="${search.perPage} == 30" value="30">30</option>
+                            <option th:selected="${search.perPage} == 40" value="40">40</option>
+                            <option th:selected="${search.perPage} == 50" value="50">50</option>
                         </select>
                         개씩 보기
                     </label>
                     <div class="flex-row justify-content-end">
-                        <label>
-                            <select name="sortBy">
-                                <option selected value="date">등록일</option>
-                                <option value="view">조회수</option>
+                        <label for="sortBy">
+                            <select name="sortBy" id="sortBy">
+                                <option th:selected="${search.sortBy} == 'date'" value="date">등록일</option>
+                                <option th:selected="${search.sortBy} == 'view'" value="view">조회수</option>
                             </select>
                         </label>
-                        <label>
-                            <select name="sortOrder">
-                                <option selected value="desc">내림차순</option>
-                                <option value="asc">오름차순</option>
+
+                        <label for="sortOrder">
+                            <select name="sortOrder" id="sortOrder">
+                                <option th:selected="${search.sortOrder} == 'desc'" value="desc">내림차순</option>
+                                <option th:selected="${search.sortOrder} == 'asc'" value="asc">오름차순</option>
                             </select>
                         </label>
                     </div>
@@ -58,62 +60,35 @@
         document.addEventListener('DOMContentLoaded', function (){
             const board = window.location.pathname.split('/').pop()
 
-            document.getElementById('searchBtn').addEventListener('click',async function (event){
+            document.getElementById('searchForm').addEventListener('submit', (event) => {
+                event.preventDefault()
+                search();
+            })
+
+            document.getElementById('searchBtn').addEventListener('click', function (event){
                 event.preventDefault();
-
-                const formData = new FormData(document.getElementById('searchForm'))
-                const urlParams = new URLSearchParams(formData)
-                urlParams.set('board', board)
-
-                const urlString = urlParams.toString()
-
-                history.pushState({}, '', '?'+decodeURI(urlString))
-
-                const response = await fetch(`/api/search?${urlString}`)
-                const data = await response.json();
-
-                if (data.result === true) {
-                    console.log(data.data)
-                    console.log(data)
-                    //검색한 조건의 게시글 fetch
-                    //다른 게시판의 게시글도 articles-container 를 가져야 공통으로 쓸 수 있다
-                    const articles = data.data.articles;
-                    const articlesContainer = document.getElementById('articles-container');
-
-                    articlesContainer.innerHTML = '';
-
-                    articles.forEach(article => {
-                        const articleElement = `
-                            <tr>
-                                <td>${article.category.name}</td>
-                                <td style="text-align: left">
-                                    <a href="http://localhost:8080/notice/${article.articleId}">
-                                        <span>${article.title}</span>
-                                    </a>
-                                </td>
-                                <td>${article.viewCount}</td>
-                                <td>${article.createdAt}</td>
-                                <td>${article.admin.name}</td>
-                            </tr>
-                            `;
-
-                        articlesContainer.innerHTML += articleElement;
-                    });
-                    //검색한 조건의 게시글 페이지번호 링크 fetch
-                    //공통으로 쓸려면  id값이 pageNav-container가 있어야한다
-                    const pageNav = data.data.pageGroup
-                    const pageNavContainer = document.getElementById('pageNav-container')
-
-                    pageNavContainer.innerHTML = '';
-                    for (let i = pageNav.startNum; i <= pageNav.endNum; i++) {
-                        const pageEle = document.createElement('span');
-                        pageEle.innerText = i;
-                        pageEle.setAttribute('onclick', 'linkPage(event)')
-
-                        pageNavContainer.appendChild(pageEle)
-                    }
-                }
+                search();
             });
+
+            document.getElementById('itemPerPage').addEventListener('change', () => {
+                search();
+            })
+
+            document.getElementById('sortBy').addEventListener('change', () => {
+                search();
+            })
+
+            document.getElementById('sortOrder').addEventListener('change', () => {
+                search();
+            })
+
+            const search = () => {
+                const searchForm = document.getElementById('searchForm')
+                const formData = new FormData(searchForm)
+                formData.set('board', board);
+
+                searchForm.submit();
+            }
         });
     </script>
     </div>

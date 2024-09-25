@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 <div layout:fragment="content">
-    <div th:replace="~{common/searchBox :: searchBox(categories=${categories})}"></div>
+    <div th:replace="~{common/searchBox :: searchBox(categories=${categories}, search=${search})}"></div>
     <article>
         <a href="/notice/form">등록</a>
         <table>

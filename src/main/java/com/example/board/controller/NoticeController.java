@@ -48,7 +48,7 @@ public class NoticeController extends ArticleController {
                         .map(notice, ArticleResDto.NoticeList.class))
                         .toList();
 
-
+        model.addAttribute("search", searchRequest);
         model.addAttribute("categories", categories);
         model.addAttribute("page", page);
         model.addAttribute("articles", notices);
