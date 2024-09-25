@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<body>
+<div th:fragment="pageNav(page)">
+    <div id="prevPage"> 이전 </div>
+
+    <div id="pageNav-container">
+        <span th:each="num : ${#numbers.sequence(page.startNum, page.endNum)}">
+            <span th:text="${num}" onclick="linkPage(event)"></span>
+        </span>
+    </div>
+
+    <div id="nextPage"> 다음 </div>
+
+    <script>
+        const linkPage = (event) => {
+            const linkPageNum = event.target.textContent;
+
+            const url = new URL(window.location.href)
+
+            url.searchParams.set('currentPage', linkPageNum)
+            window.location.href = url.href
+        }
+    </script>
+</div>
+</body>
+</html>

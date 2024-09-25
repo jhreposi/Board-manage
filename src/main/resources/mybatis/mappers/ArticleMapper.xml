@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.board.repository.ArticleMapper">
-    <select id="selectArticleList" resultMap="ArticleResultMap" parameterType="com.example.board.dto.SearchRequest">
+    <select id="selectArticleList" resultMap="ArticleResultMap" parameterType="hashmap">
         SELECT
             a.article_id,
             a.title,
@@ -17,21 +17,26 @@
             INNER JOIN category c   ON a.category_id = c.category_id
                 INNER JOIN admin ad ON a.admin_id = ad.admin_id
         WHERE
-            1=1
-        <if test='category != null and category != "" '>
-            AND
-                a.category_id = #{category}
-        </if>
-        <if test='keyword != null and keyword != "" '>
-            AND
-                (title LIKE CONCAT('%', #{keyword}, '%')
-                OR ad.name LIKE CONCAT('%', #{keyword}, '%')
-                OR content LIKE CONCAT('%', #{keyword}, '%'))
-        </if>
-            AND
-                a.created_at BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
+            a.category_id IN
+            <foreach item="categoryId" collection="search.categoryIds" open="(" separator="," close=")">
+                #{categoryId}
+            </foreach>
+            <if test='search.category != null and search.category != "" '>
+                AND
+                    a.category_id = #{search.category}
+            </if>
+            <if test='search.keyword != null and search.keyword != "" '>
+                AND
+                    (title LIKE CONCAT('%', #{search.keyword}, '%')
+                    OR ad.name LIKE CONCAT('%', #{search.keyword}, '%')
+                    OR content LIKE CONCAT('%', #{search.keyword}, '%'))
+            </if>
+                AND
+                    a.created_at BETWEEN #{search.startDate} AND CONCAT(#{search.endDate}, ' 23:59:59')
         ORDER BY
-            ${sortByName} ${sortOrder}
+            ${search.sortByName} ${search.sortOrder}
+        LIMIT
+            #{criteria.limit} OFFSET #{criteria.offset}
 
     </select>
     <select id="selectCategoriesBy" resultType="Category">
@@ -43,6 +48,32 @@
         WHERE
             board_type = #{boardType}
     </select>
+
+    <select id="selectArticleCount" parameterType="com.example.board.dto.SearchRequest" resultType="java.lang.Integer">
+        SELECT
+            count(article_id)
+        FROM article a
+            INNER JOIN category c   ON a.category_id = c.category_id
+                INNER JOIN admin ad ON a.admin_id = ad.admin_id
+        WHERE
+            a.category_id IN
+            <foreach item="categoryId" collection="categoryIds" open="(" separator="," close=")">
+                #{categoryId}
+            </foreach>
+            <if test='category != null and category != "" '>
+                AND
+                    a.category_id = #{category}
+            </if>
+            <if test='keyword != null and keyword != "" '>
+                AND
+                    (title LIKE CONCAT('%', #{keyword}, '%')
+                    OR ad.name LIKE CONCAT('%', #{keyword}, '%')
+                    OR content LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            AND
+                a.created_at BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
+    </select>
+
     <select id="selectArticleById" resultMap="ArticleResultMap">
         SELECT
             a.article_id,

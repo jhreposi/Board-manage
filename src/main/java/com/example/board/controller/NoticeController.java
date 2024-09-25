@@ -1,14 +1,12 @@
 package com.example.board.controller;
 
-import com.example.board.dto.ArticleReqDto;
-import com.example.board.dto.ArticleResDto;
-import com.example.board.dto.CategoryDto;
-import com.example.board.dto.SearchRequest;
+import com.example.board.dto.*;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.BoardName;
 import com.example.board.service.ArticleService;
 import com.example.board.service.SessionHelper;
+import com.example.board.util.Page;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -37,15 +36,25 @@ public class NoticeController extends ArticleController {
     public String getArticle(SearchRequest searchRequest, Model model) {
         searchRequest.defaultSearchValue();
 
-        List<Article> article = articleService.getArticle(searchRequest);
         List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
+        List<Integer> categoryIds = categories.stream().map(CategoryDto::getCategoryId).toList();
+        searchRequest.setCategoryIds(categoryIds);
 
-        List<ArticleResDto.NoticeList> notices = article.stream().map(notice -> modelMapper
+        int articleCount = articleService.getArticleCount(searchRequest);
+        Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
+
+        PageResponse page = modelMapper.map(articlePage.getPageGroup(), PageResponse.class);
+        log.info("page refactor info {}", page.toString());
+
+        List<ArticleResDto.NoticeList> notices = articlePage.getArticles().stream().map(notice -> modelMapper
                         .map(notice, ArticleResDto.NoticeList.class))
                         .toList();
 
-        model.addAttribute("articles", notices);
+
         model.addAttribute("categories", categories);
+        model.addAttribute("page", page);
+        model.addAttribute("articles", notices);
+
         return "view/notice";
     }
 
@@ -58,6 +67,7 @@ public class NoticeController extends ArticleController {
 
         model.addAttribute("categories", categories);
 
+        //article Id가 있다면 수정 페이지로 해당 article 정보를 가져온다
         if (articleId != null) {
             Article article = articleService.getArticleDetail(articleId);
             ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
@@ -72,7 +82,8 @@ public class NoticeController extends ArticleController {
         noticeRequest.setAdminId(sessionHelper.getAdminInfo().getAdminId());
 
         Article article = Article.from(noticeRequest);
-        // 새글 작성시에는 form에 name값이 articleId인 input 태그가 없어 기본생성자로 0이된다
+        // 새글 작성시에는 form에 name값이 articleId인 input 태그가 없어 기본생성자 초기화 값인 0으로
+        // 새글, 수정 작업을 결정한다
         boolean isNewArticle = noticeRequest.getArticleId() == 0;
 
         int responseArticleId = 0;

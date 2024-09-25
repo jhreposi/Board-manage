@@ -4,12 +4,11 @@ import com.example.board.dto.SearchRequest;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.service.ArticleService;
+import com.example.board.util.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,10 +20,13 @@ public class ArticleRestController {
     @GetMapping("/search")
     public ResponseEntity<ResponseData<Object>> articleSearch(@ModelAttribute SearchRequest searchRequest) {
         searchRequest.defaultSearchValue();
-        List<Article> articles = articleService.getArticle(searchRequest);
+        //요청 uri에서 게시판 이름으로 boardType추출하기 추출로 category Ids 가져오기
+
+        int articleCount = articleService.getArticleCount(searchRequest);
+        Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
 
         ResponseData<Object> responseData = ResponseData.builder()
-                .data(articles)
+                .data(articlePage)
                 .result(true)
                 .build();
 

@@ -2,11 +2,11 @@ package com.example.board.dto;
 
 import com.example.board.util.StringUtil;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,10 +22,15 @@ public class SearchRequest {
     private String sortOrder;   //정렬 옵션 desc asc
     private int currentPage;
 
+    private List<Integer> categoryIds;
+
     public SearchRequest() {
         this.currentPage = 1;
     }
 
+    // null 이거나 빈값 일시 기본값 설정
+    // 정렬 기준 컬럼인 날일, 조회수를 db컬럼에 일치하게 요청하지 않고 date, view로 추상화해서
+    // sortColumn을 이용해 db에서 사용 할 컬럼명을 sortByName에 설정한다
     public void defaultSearchValue() {
         this.startDate = defaultStartDate();
         this.endDate = defaultEndDate();

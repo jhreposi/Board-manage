@@ -5,6 +5,7 @@ import com.example.board.global.exception.ContentNotFoundException;
 import com.example.board.model.Article;
 import com.example.board.model.Category;
 import com.example.board.repository.ArticleMapper;
+import com.example.board.util.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,18 @@ public class ArticleService {
         this.articleMapper = articleMapper;
     }
 
-    public List<Article> getArticle(SearchRequest searchRequest) {
-        return articleMapper.selectArticleList(searchRequest);
+    public int getArticleCount(SearchRequest searchOption) {
+        return articleMapper.selectArticleCount(searchOption);
+    }
+
+    public Page<Article> getPagingArticleList(SearchRequest searchOption, int articleCount) {
+        Page<Article> page = new Page<>();
+        page.setPage(searchOption, articleCount);
+
+        List<Article> articles = articleMapper.selectArticleList(searchOption, page.getCriteria());
+        page.setArticles(articles);
+
+        return page;
     }
 
     public List<Category> getCategoriesBy(int boardType) {
