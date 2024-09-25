@@ -37,6 +37,10 @@ public class ArticleService {
         return articleMapper.selectCategoriesBy(boardType);
     }
 
+    public List<Integer> getCategoryIds(int boardType) {
+        return articleMapper.selectCategoryIds(boardType);
+    }
+
     public int createArticle(Article article) {
         articleMapper.insertArticle(article);
         int generatedArticleId = article.getArticleId();

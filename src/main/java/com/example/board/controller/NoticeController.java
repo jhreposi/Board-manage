@@ -3,7 +3,7 @@ package com.example.board.controller;
 import com.example.board.dto.*;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
-import com.example.board.model.BoardName;
+import com.example.board.model.Board;
 import com.example.board.service.ArticleService;
 import com.example.board.service.SessionHelper;
 import com.example.board.util.Page;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -36,7 +35,7 @@ public class NoticeController extends ArticleController {
     public String getArticle(SearchRequest searchRequest, Model model) {
         searchRequest.defaultSearchValue();
 
-        List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
+        List<CategoryDto> categories = getCategories(Board.NOTICE.getBoardType());
         List<Integer> categoryIds = categories.stream().map(CategoryDto::getCategoryId).toList();
         searchRequest.setCategoryIds(categoryIds);
 
@@ -44,7 +43,6 @@ public class NoticeController extends ArticleController {
         Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
 
         PageResponse page = modelMapper.map(articlePage.getPageGroup(), PageResponse.class);
-        log.info("page refactor info {}", page.toString());
 
         List<ArticleResDto.NoticeList> notices = articlePage.getArticles().stream().map(notice -> modelMapper
                         .map(notice, ArticleResDto.NoticeList.class))
@@ -63,7 +61,7 @@ public class NoticeController extends ArticleController {
         if (sessionHelper.getAdminInfo() == null) {
             return "redirect:/login";
         }
-        List<CategoryDto> categories = getCategories(BoardName.NOTICE.getBoardType());
+        List<CategoryDto> categories = getCategories(Board.NOTICE.getBoardType());
 
         model.addAttribute("categories", categories);
 

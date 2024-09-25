@@ -56,16 +56,20 @@
         </div>
     <script>
         document.addEventListener('DOMContentLoaded', function (){
+            const board = window.location.pathname.split('/').pop()
 
             document.getElementById('searchBtn').addEventListener('click',async function (event){
                 event.preventDefault();
 
                 const formData = new FormData(document.getElementById('searchForm'))
-                const urlParams = new URLSearchParams(formData).toString();
+                const urlParams = new URLSearchParams(formData)
+                urlParams.set('board', board)
 
-                history.pushState({}, '', '?'+decodeURI(urlParams))
+                const urlString = urlParams.toString()
 
-                const response = await fetch(`/api/search?${urlParams}`)
+                history.pushState({}, '', '?'+decodeURI(urlString))
+
+                const response = await fetch(`/api/search?${urlString}`)
                 const data = await response.json();
 
                 if (data.result === true) {

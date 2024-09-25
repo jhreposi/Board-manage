@@ -49,6 +49,15 @@
             board_type = #{boardType}
     </select>
 
+    <select id="selectCategoryIds" resultType="java.lang.Integer">
+        SELECT
+            category_id
+        FROM
+            category
+        WHERE
+            board_type = #{boardType}
+    </select>
+
     <select id="selectArticleCount" parameterType="com.example.board.dto.SearchRequest" resultType="java.lang.Integer">
         SELECT
             count(article_id)

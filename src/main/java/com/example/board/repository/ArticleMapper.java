@@ -18,6 +18,8 @@ public interface ArticleMapper {
 
     List<Category> selectCategoriesBy(int boardType);
 
+    List<Integer> selectCategoryIds(int boardType);
+
     void insertArticle(Article article);
 
     Optional<Article> selectArticleById(int articleId);
@@ -25,4 +27,5 @@ public interface ArticleMapper {
     void updateArticle(Article article);
 
     void deleteArticleBy(int articleId);
+
 }
