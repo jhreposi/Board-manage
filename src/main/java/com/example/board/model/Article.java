@@ -22,7 +22,10 @@ public class Article {
 
     @ToString.Include
     private Category category;
+    @ToString.Include
     private Admin admin;
+    @ToString.Include
+    private Member member;
 
     public static Article from(ArticleReqDto.NoticePost dto) {
         Article article = Article.builder()

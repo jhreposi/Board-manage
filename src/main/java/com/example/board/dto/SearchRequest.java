@@ -22,9 +22,7 @@ public class SearchRequest {
     private String sortOrder;   //정렬 옵션 desc asc
     private int currentPage;
 
-    private String board;       //요청한 게시판
-
-    private List<Integer> categoryIds; //db 조회용
+    private int boardType;      //게시판 구별 db조회용
 
     public SearchRequest() {
         this.currentPage = 1;

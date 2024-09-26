@@ -12,15 +12,14 @@
             c.category_id,
             c.name AS categoryName,
             c.board_type,
-            ad.name AS adminName
+            ad.name AS adminName,
+            m.username
         FROM article a
-            INNER JOIN category c   ON a.category_id = c.category_id
-                INNER JOIN admin ad ON a.admin_id = ad.admin_id
+            INNER JOIN category c ON a.category_id = c.category_id
+                LEFT JOIN admin ad ON a.admin_id = ad.admin_id
+                    LEFT JOIN member m ON a.member_id = m.member_id
         WHERE
-            a.category_id IN
-            <foreach item="categoryId" collection="search.categoryIds" open="(" separator="," close=")">
-                #{categoryId}
-            </foreach>
+            c.board_type = #{search.boardType}
             <if test='search.category != null and search.category != "" '>
                 AND
                     a.category_id = #{search.category}
@@ -49,26 +48,15 @@
             board_type = #{boardType}
     </select>
 
-    <select id="selectCategoryIds" resultType="java.lang.Integer">
-        SELECT
-            category_id
-        FROM
-            category
-        WHERE
-            board_type = #{boardType}
-    </select>
-
     <select id="selectArticleCount" parameterType="com.example.board.dto.SearchRequest" resultType="java.lang.Integer">
         SELECT
             count(article_id)
         FROM article a
             INNER JOIN category c   ON a.category_id = c.category_id
-                INNER JOIN admin ad ON a.admin_id = ad.admin_id
+                LEFT JOIN admin ad ON a.admin_id = ad.admin_id
+                    LEFT JOIN member m ON a.member_id = m.member_id
         WHERE
-            a.category_id IN
-            <foreach item="categoryId" collection="categoryIds" open="(" separator="," close=")">
-                #{categoryId}
-            </foreach>
+            c.board_type = #{boardType}
             <if test='category != null and category != "" '>
                 AND
                     a.category_id = #{category}
@@ -151,6 +139,10 @@
         <association property="admin" javaType="Admin">
             <id property="adminId" column="admin_id"/>
             <result property="name" column="adminName"/>
+        </association>
+        <association property="member" javaType="Member">
+            <id property="memberId" column="member_id"/>
+            <result property="username" column="username"/>
         </association>
     </resultMap>
 </mapper>

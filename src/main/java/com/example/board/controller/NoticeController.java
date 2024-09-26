@@ -36,8 +36,7 @@ public class NoticeController extends ArticleController {
         searchRequest.defaultSearchValue();
 
         List<CategoryDto> categories = getCategories(Board.NOTICE.getBoardType());
-        List<Integer> categoryIds = categories.stream().map(CategoryDto::getCategoryId).toList();
-        searchRequest.setCategoryIds(categoryIds);
+        searchRequest.setBoardType(Board.NOTICE.getBoardType());
 
         int articleCount = articleService.getArticleCount(searchRequest);
         Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);

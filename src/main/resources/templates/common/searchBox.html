@@ -58,7 +58,6 @@
         </div>
     <script>
         document.addEventListener('DOMContentLoaded', function (){
-            const board = window.location.pathname.split('/').pop()
 
             document.getElementById('searchForm').addEventListener('submit', (event) => {
                 event.preventDefault()
@@ -85,7 +84,6 @@
             const search = () => {
                 const searchForm = document.getElementById('searchForm')
                 const formData = new FormData(searchForm)
-                formData.set('board', board);
 
                 searchForm.submit();
             }
