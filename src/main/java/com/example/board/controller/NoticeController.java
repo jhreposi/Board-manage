@@ -39,9 +39,9 @@ public class NoticeController extends ArticleController {
         int articleCount = articleService.getArticleCount(searchRequest);
         Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
 
-        PageResponse page = null;
+        PageResponse page = ArticleMapper.INSTANCE.toPageGroupDto(articlePage.getPageGroup());
 
-        List<ArticleResDto.NoticeList> notices = null; // todo mapping
+        List<ArticleResDto.NoticeList> notices = ArticleMapper.INSTANCE.toNoticeBodyDto(articlePage.getArticles());
 
         model.addAttribute("search", searchRequest);
         model.addAttribute("categories", categories);
@@ -60,15 +60,16 @@ public class NoticeController extends ArticleController {
 
         model.addAttribute("categories", categories);
 
-        //article Id가 있다면 수정 페이지로 해당 article 정보를 가져온다
+        //article Id가 있다면 수정 페이지로 해당 article 정보를 가져 온다
         if (articleId != null) {
             Article article = articleService.getArticleDetail(articleId);
-            ArticleResDto.ArticleDetail articleDetail = null; // todo mapping
+            ArticleResDto.ArticleDetail articleDetail = ArticleMapper.INSTANCE.toArticleDetailDto(article);
             model.addAttribute("article", articleDetail);
         }
 
         return "view/noticeCreate";
     }
+
     @ResponseBody
     @PostMapping("/notice/form")
     public ResponseEntity<ResponseData<Object>> createNotice(@Valid ArticleReqDto.NoticePost noticeRequest) {
@@ -90,6 +91,7 @@ public class NoticeController extends ArticleController {
             responseArticleId = noticeRequest.getArticleId();
             message = "게시글 수정 완료";
         }
+
         ResponseData<Object> response = ResponseData.builder()
                 .result(true)
                 .data(responseArticleId)
@@ -102,19 +104,20 @@ public class NoticeController extends ArticleController {
     @GetMapping("/notice/{articleId}")
     public String getNoticeDetail(@PathVariable("articleId") int articleId, Model model) {
         Article article = articleService.getArticleDetail(articleId);
-        ArticleResDto.ArticleDetail articleDetail = null; // todo mapping
+        ArticleResDto.ArticleDetail articleDetail = ArticleMapper.INSTANCE.toArticleDetailDto(article);
 
         model.addAttribute("article", articleDetail);
+
         return "view/noticeDetail";
     }
 
     @ResponseBody
     @DeleteMapping("/notice")
-    public ResponseEntity<Void> removeNotice(
-            @ModelAttribute(value = "articleId") int articleId) {
+    public ResponseEntity<Void> removeNotice(@ModelAttribute(value = "articleId") int articleId) {
         if (sessionHelper.getAdminInfo() == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
         articleService.removeArticle(articleId);
 
         return ResponseEntity.noContent().build();

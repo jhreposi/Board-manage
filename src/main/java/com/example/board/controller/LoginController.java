@@ -1,6 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.dto.AdminReq;
+import com.example.board.dto.mappers.AdminMapper;
 import com.example.board.global.response.ResponseData;
 import com.example.board.dto.AdminRes;
 import com.example.board.model.Admin;
@@ -52,7 +53,7 @@ public class LoginController {
 
         int adminId = loginService.getAdminIdByLoginInfo(requestAdmin);
         Admin responseAdmin = loginService.getAdminById(adminId);
-        AdminRes.InfoDto adminInfo = null;  // todo mapping
+        AdminRes.InfoDto adminInfo = AdminMapper.INSTANCE.toAdminInfoDto(responseAdmin);
 
         if (sessionHelper.getAdminInfo() != null) {
             sessionHelper.removeAdminInfo();

@@ -32,6 +32,6 @@ public class ArticleResDto {
         private String updatedAt;
 
         private String categoryName;
-        private String adminName;
+        private String author;
     }
 }

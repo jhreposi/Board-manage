@@ -5,7 +5,7 @@
       layout:decorate="~{layout/default}">
 <div layout:fragment="content">
     <div>
-        작성자: &nbsp;<span th:text="${article.adminName}"></span>
+        작성자: &nbsp;<span th:text="${article.author}"></span>
         <div>
             등록일시 <span th:text="${article.createdAt}"></span>
             <span th:if="${article.updatedAt != null}">

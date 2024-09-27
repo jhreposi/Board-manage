@@ -51,8 +51,8 @@ public class Page<T> {
         private int currentPage;
         private int lastPage;
 
-        private int startNum;
-        private int endNum;
+        private int startNum;   //currentPage 기본값이 1이라 startNum은 최소 1인데
+        private int endNum;     //검색시 검색결과가 0이라면 endNum은 0이 될수 있다 그래서 뷰에서 0일때 안보이게 처리
         private int pageSize;
 
         private PageGroup() {

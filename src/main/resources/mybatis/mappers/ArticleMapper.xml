@@ -27,8 +27,10 @@
             <if test='search.keyword != null and search.keyword != "" '>
                 AND
                     (title LIKE CONCAT('%', #{search.keyword}, '%')
-                    OR ad.name LIKE CONCAT('%', #{search.keyword}, '%')
-                    OR content LIKE CONCAT('%', #{search.keyword}, '%'))
+                        OR content LIKE CONCAT('%', #{search.keyword}, '%'))
+                    <if test='search.boardType != 1'>
+                            OR m.username LIKE CONCAT('%', #{search.keyword}, '%')
+                    </if>
             </if>
                 AND
                     a.created_at BETWEEN #{search.startDate} AND CONCAT(#{search.endDate}, ' 23:59:59')
@@ -64,11 +66,13 @@
             <if test='keyword != null and keyword != "" '>
                 AND
                     (title LIKE CONCAT('%', #{keyword}, '%')
-                    OR ad.name LIKE CONCAT('%', #{keyword}, '%')
-                    OR content LIKE CONCAT('%', #{keyword}, '%'))
+                        OR content LIKE CONCAT('%', #{keyword}, '%'))
+                    <if test='boardType != 1'>
+                        OR m.username LIKE CONCAT('%', #{keyword}, '%')
+                    </if>
             </if>
-            AND
-                a.created_at BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
+                AND
+                    a.created_at BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
     </select>
 
     <select id="selectArticleById" resultMap="ArticleResultMap">
@@ -82,11 +86,13 @@
             a.pinned_yn,
             c.name AS categoryName,
             c.category_id,
-            ad.name AS adminName
+            ad.name AS adminName,
+            m.username
         FROM
             article a
             INNER JOIN category c ON  a.category_id = c.category_id
-                INNER JOIN admin ad ON a.admin_id = ad.admin_id
+                LEFT JOIN admin ad ON a.admin_id = ad.admin_id
+                    LEFT JOIN member m ON a.member_id = m.member_id
         WHERE
             article_id = #{articleId}
     </select>
