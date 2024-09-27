@@ -32,9 +32,9 @@ public class NoticeController extends ArticleController {
     @GetMapping("/notice")
     public String getArticle(SearchRequest searchRequest, Model model) {
         searchRequest.defaultSearchValue();
+        searchRequest.setBoardType(Board.NOTICE.getBoardType());
 
         List<CategoryDto> categories = getCategories(Board.NOTICE.getBoardType());
-        searchRequest.setBoardType(Board.NOTICE.getBoardType());
 
         int articleCount = articleService.getArticleCount(searchRequest);
         Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
@@ -67,7 +67,7 @@ public class NoticeController extends ArticleController {
             model.addAttribute("article", articleDetail);
         }
 
-        return "view/noticeCreate";
+        return "view/noticeForm";
     }
 
     @ResponseBody

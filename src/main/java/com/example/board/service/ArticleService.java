@@ -7,7 +7,6 @@ import com.example.board.model.Category;
 import com.example.board.repository.ArticleMapper;
 import com.example.board.util.Page;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +27,6 @@ public class ArticleService {
         page.setPage(searchOption, articleCount);
 
         List<Article> articles = articleMapper.selectArticleList(searchOption, page.getCriteria());
-        System.out.println(articles.toString());
         page.setArticles(articles);
 
         return page;

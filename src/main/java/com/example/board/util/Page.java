@@ -26,10 +26,8 @@ public class Page<T> {
 
     private void paging() {
         lastPage = totalCount / itemPerPage + (totalCount % itemPerPage > 0 ? 1 : 0);
-        //db조회를 위한 범위 설정
-        criteria = new Criteria();
-        //뷰 페이지 페이지 번호 네비게이션 설정
-        pageGroup = new PageGroup(currentPage, lastPage);
+        criteria = new Criteria();                          //db 조회를 위한 기준 설정
+        pageGroup = new PageGroup(currentPage, lastPage);   //뷰 페이지 페이지 번호 리스트 설정
     }
 
     @Getter
@@ -53,7 +51,7 @@ public class Page<T> {
 
         private int startNum;   //currentPage 기본값이 1이라 startNum은 최소 1인데
         private int endNum;     //검색시 검색결과가 0이라면 endNum은 0이 될수 있다 그래서 뷰에서 0일때 안보이게 처리
-        private int pageSize;
+        private final int pageSize;   //한 페이지에 페이지 번호 보여줄 갯수
 
         private PageGroup() {
             pageSize = 5;

@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Setter
 @Getter
@@ -16,9 +15,9 @@ public class SearchRequest {
     private String endDate;
     private String category;
     private String keyword;
-    private int perPage;        //페이지당 아이템 수
-    private String sortBy;      //요청한 정렬기준 컬럼
-    private String sortByName;  //변환한 정렬기준 컬럼
+    private int perPage;        //한 페이지 아이템 수
+    private String sortBy;      //요청한 정렬기준
+    private String sortByName;  //정렬 기준을 db에 맞게 변환한 정렬 기준 컬럼
     private String sortOrder;   //정렬 옵션 desc asc
     private int currentPage;
 
@@ -34,12 +33,10 @@ public class SearchRequest {
     public void defaultSearchValue() {
         this.startDate = defaultStartDate();
         this.endDate = defaultEndDate();
-        if (!StringUtil.isNullOrEmpty(this.keyword)) {
-            this.keyword.trim();
-        }
+        this.keyword = defaultKeyword();
         this.perPage = defaultPerPage();
         this.sortBy = defaultSortBy();
-        this.sortByName = SortColumn.fromSortCriteria(this.sortBy).name();
+        this.sortByName = setSortByNameFrom();
         this.sortOrder = defaultSortOrder();
     }
 
@@ -54,6 +51,10 @@ public class SearchRequest {
         return StringUtil.isNullOrEmpty(endDate) ? LocalDate.now().toString() : endDate;
     }
 
+    private String defaultKeyword() {
+        return StringUtil.isNullOrEmpty(keyword) ? keyword : keyword.trim();
+    }
+
     private int defaultPerPage() {
         return perPage == 0 ? 10 : perPage;
     }
@@ -62,12 +63,16 @@ public class SearchRequest {
         return StringUtil.isNullOrEmpty(sortBy) ? "date" : sortBy;
     }
 
+    private String setSortByNameFrom() {
+        return SortColumn.fromSortCriteria(sortBy).name();
+    }
+
     private String defaultSortOrder() {
         return StringUtil.isNullOrEmpty(sortOrder) ? "DESC" : sortOrder;
     }
 
     @Getter
-    protected enum SortColumn {
+    private enum SortColumn {
         created_at("date"),
         view_count("view");
 
@@ -77,7 +82,7 @@ public class SearchRequest {
             this.sortCriteria = sortCriteria;
         }
 
-        public static SortColumn fromSortCriteria(String criteria) {
+        private static SortColumn fromSortCriteria(String criteria) {
             for (SortColumn column : values()) {
                 if (column.sortCriteria.equals(criteria)) {
                     return column;
