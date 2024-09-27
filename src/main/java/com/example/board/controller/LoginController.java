@@ -7,9 +7,7 @@ import com.example.board.model.Admin;
 import com.example.board.service.EncryptService;
 import com.example.board.service.LoginService;
 import com.example.board.service.SessionHelper;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.security.PublicKey;
 
 @Slf4j
@@ -26,13 +23,11 @@ public class LoginController {
     SessionHelper sessionHelper;
     EncryptService encryptService;
     LoginService loginService;
-    ModelMapper modelMapper;
 
-    public LoginController(SessionHelper sessionHelper,EncryptService encryptService, LoginService loginService, ModelMapper modelMapper) {
+    public LoginController(SessionHelper sessionHelper,EncryptService encryptService, LoginService loginService) {
         this.sessionHelper = sessionHelper;
         this.encryptService = encryptService;
         this.loginService = loginService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/login")
@@ -57,7 +52,7 @@ public class LoginController {
 
         int adminId = loginService.getAdminIdByLoginInfo(requestAdmin);
         Admin responseAdmin = loginService.getAdminById(adminId);
-        AdminRes.InfoDto adminInfo = modelMapper.map(responseAdmin, AdminRes.InfoDto.class);
+        AdminRes.InfoDto adminInfo = null;  // todo mapping
 
         if (sessionHelper.getAdminInfo() != null) {
             sessionHelper.removeAdminInfo();

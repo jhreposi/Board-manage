@@ -1,6 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.dto.*;
+import com.example.board.dto.mappers.ArticleMapper;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.Board;
@@ -9,7 +10,6 @@ import com.example.board.service.SessionHelper;
 import com.example.board.util.Page;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,13 +22,11 @@ import java.util.List;
 public class NoticeController extends ArticleController {
     SessionHelper sessionHelper;
     ArticleService articleService;
-    ModelMapper modelMapper;
 
-    public NoticeController(SessionHelper sessionHelper, ArticleService articleService, ModelMapper modelMapper) {
-        super(articleService, modelMapper);
+    public NoticeController(SessionHelper sessionHelper, ArticleService articleService) {
+        super(articleService);
         this.sessionHelper = sessionHelper;
         this.articleService = articleService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/notice")
@@ -41,11 +39,9 @@ public class NoticeController extends ArticleController {
         int articleCount = articleService.getArticleCount(searchRequest);
         Page<Article> articlePage = articleService.getPagingArticleList(searchRequest, articleCount);
 
-        PageResponse page = modelMapper.map(articlePage.getPageGroup(), PageResponse.class);
+        PageResponse page = null;
 
-        List<ArticleResDto.NoticeList> notices = articlePage.getArticles().stream().map(notice -> modelMapper
-                        .map(notice, ArticleResDto.NoticeList.class))
-                        .toList();
+        List<ArticleResDto.NoticeList> notices = null; // todo mapping
 
         model.addAttribute("search", searchRequest);
         model.addAttribute("categories", categories);
@@ -67,7 +63,7 @@ public class NoticeController extends ArticleController {
         //article Id가 있다면 수정 페이지로 해당 article 정보를 가져온다
         if (articleId != null) {
             Article article = articleService.getArticleDetail(articleId);
-            ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
+            ArticleResDto.ArticleDetail articleDetail = null; // todo mapping
             model.addAttribute("article", articleDetail);
         }
 
@@ -106,7 +102,7 @@ public class NoticeController extends ArticleController {
     @GetMapping("/notice/{articleId}")
     public String getNoticeDetail(@PathVariable("articleId") int articleId, Model model) {
         Article article = articleService.getArticleDetail(articleId);
-        ArticleResDto.ArticleDetail articleDetail = modelMapper.map(article, ArticleResDto.ArticleDetail.class);
+        ArticleResDto.ArticleDetail articleDetail = null; // todo mapping
 
         model.addAttribute("article", articleDetail);
         return "view/noticeDetail";
