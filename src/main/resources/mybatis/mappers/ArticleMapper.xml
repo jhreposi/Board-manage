@@ -9,6 +9,7 @@
             a.view_count,
             a.created_at,
             a.updated_at,
+            a.pinned_yn,
             c.category_id,
             c.name AS categoryName,
             c.board_type,
@@ -20,6 +21,8 @@
                     LEFT JOIN member m ON a.member_id = m.member_id
         WHERE
             c.board_type = #{search.boardType}
+                AND
+            a.pinned_yn != 'Y'
             <if test='search.category != null and search.category != "" '>
                 AND
                     a.category_id = #{search.category}
@@ -38,8 +41,8 @@
             ${search.sortByName} ${search.sortOrder}
         LIMIT
             #{criteria.limit} OFFSET #{criteria.offset}
-
     </select>
+
     <select id="selectCategoriesBy" resultType="Category">
         SELECT
             category_id,
@@ -59,6 +62,8 @@
                     LEFT JOIN member m ON a.member_id = m.member_id
         WHERE
             c.board_type = #{boardType}
+                AND
+            a.pinned_yn != 'Y'
             <if test='category != null and category != "" '>
                 AND
                     a.category_id = #{category}
@@ -113,7 +118,8 @@
             admin_id = ${admin.adminId},
             title = #{title},
             content = #{content},
-            pinned_yn = #{pinnedYn}
+            pinned_yn = #{pinnedYn},
+            updated_at = NOW()
         WHERE
             article_id = #{articleId}
     </update>
@@ -124,6 +130,31 @@
         WHERE
             article_id = #{articleId}
     </delete>
+
+    <select id="selectPinnedArticle" resultMap="ArticleResultMap">
+        SELECT
+            a.article_id,
+            a.title,
+            a.content,
+            a.view_count,
+            a.created_at,
+            a.updated_at,
+            a.pinned_yn,
+            c.category_id,
+            c.name AS categoryName,
+            c.board_type,
+            ad.name AS adminName
+        FROM
+            article a
+                 INNER JOIN category c ON a.category_id = c.category_id
+                 LEFT JOIN admin ad ON a.admin_id = ad.admin_id
+        WHERE
+            a.pinned_yn = 'Y'
+        ORDER BY
+            a.updated_at DESC, a.created_at DESC
+        LIMIT
+            5
+    </select>
 
 
     <resultMap id="ArticleResultMap" type="Article">

@@ -17,6 +17,18 @@
                 </tr>
             </thead>
             <tbody id="articles-container">
+                <tr th:each="pinnedArticle : ${pinnedArticles}" style="background-color: darkgrey">
+                    <td th:text="${pinnedArticle.categoryName}"></td>
+                    <td style="text-align: left">
+                        <a th:href="@{/notice/{id}(id=${pinnedArticle.articleId})}">
+                            <span th:text="${pinnedArticle.title}"></span>
+                        </a>
+                    </td>
+                    <td th:text="${pinnedArticle.viewCount}"></td>
+                    <td th:text="${pinnedArticle.createdAt}"></td>
+                    <td th:text="${pinnedArticle.adminName}"></td>
+                </tr>
+
                 <tr th:each="article : ${articles}">
                     <td th:text="${article.categoryName}"></td>
                     <td style="text-align: left">

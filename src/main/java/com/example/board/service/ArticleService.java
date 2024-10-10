@@ -59,4 +59,8 @@ public class ArticleService {
     public void removeArticle(int articleId) {
         articleMapper.deleteArticleBy(articleId);
     }
+
+    public List<Article> getPinnedArticles() {
+        return articleMapper.selectPinnedArticle();
+    }
 }

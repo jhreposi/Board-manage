@@ -43,10 +43,14 @@ public class NoticeController extends ArticleController {
 
         List<ArticleResDto.NoticeList> notices = ArticleMapper.INSTANCE.toNoticeBodyDto(articlePage.getArticles());
 
+        List<Article> pinnedArticlesEntity = articleService.getPinnedArticles();
+        List<ArticleResDto.NoticeList> pinnedArticlesDto = ArticleMapper.INSTANCE.toNoticeBodyDto(pinnedArticlesEntity);
+
         model.addAttribute("search", searchRequest);
         model.addAttribute("categories", categories);
         model.addAttribute("page", page);
         model.addAttribute("articles", notices);
+        model.addAttribute("pinnedArticles", pinnedArticlesDto);
 
         return "view/notice";
     }

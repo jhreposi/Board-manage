@@ -25,6 +25,7 @@ public interface ArticleMapper {
 
     @Mapping(target = "author", expression = "java(chooseAuthor(article))")
     @Mapping(target = "categoryName", source = "article.category.name")
+    @Mapping(target = "categoryId", source = "article.category.categoryId")
     ArticleResDto.ArticleDetail toArticleDetailDto(Article article);
 
     PageResponse toPageGroupDto(Page<Article>.PageGroup pageGroup);

@@ -26,4 +26,6 @@ public interface ArticleMapper {
 
     void deleteArticleBy(int articleId);
 
+    List<Article> selectPinnedArticle();
+
 }
