@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 .layout {
-    height: 100vh;
+    /*height: 100vh;*/
 }
 
 .top-section {
@@ -34,13 +34,13 @@
 .bottom-section {
     height: 90%;
     display: flex;
+    align-items: stretch;
 }
 
 .bottom-left {
     padding-top: 5%;
     padding-left: 3%;
     width: 15%;
-    height: 100%;
     border-right: 1px solid black;
 }
 

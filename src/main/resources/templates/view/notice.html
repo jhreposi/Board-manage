@@ -1,47 +1,48 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.uldivaq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 <div layout:fragment="content">
     <div th:replace="~{common/searchBox :: searchBox(categories=${categories}, search=${search})}"></div>
-    <article>
-        <a href="/notice/form">등록</a>
-        <table>
-            <thead>
-                <tr>
-                    <td>분류</td>
-                    <td>제목</td>
-                    <td>조회수</td>
-                    <td>등록 일시</td>
-                    <td>작성자</td>
-                </tr>
-            </thead>
-            <tbody id="articles-container">
-                <tr th:each="pinnedArticle : ${pinnedArticles}" style="background-color: darkgrey">
-                    <td th:text="${pinnedArticle.categoryName}"></td>
-                    <td style="text-align: left">
+    <article class="px-3">
+        <div class="d-flex justify-content-end">
+            <a class="d-flex btn btn-light" href="/notice/form">등록</a>
+        </div>
+        <div class="d-flex flex-column just">
+            <div class="d-flex gap-1 border-top border-black border-bottom">
+                <div class="col-1">분류</div>
+                <div class="col-3">제목</div>
+                <div class="col-1">조회수</div>
+                <div class="col-3">등록 일시</div>
+                <div class="col-2">작성자</div>
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="d-flex gap-1 p-1 bg-dark-subtle border-bottom" th:each="pinnedArticle : ${pinnedArticles}">
+                    <div class="col-1" th:text="${pinnedArticle.categoryName}"></div>
+                    <div class="col-3" style="text-align: left">
                         <a th:href="@{/notice/{id}(id=${pinnedArticle.articleId})}">
                             <span th:text="${pinnedArticle.title}"></span>
                         </a>
-                    </td>
-                    <td th:text="${pinnedArticle.viewCount}"></td>
-                    <td th:text="${pinnedArticle.createdAt}"></td>
-                    <td th:text="${pinnedArticle.adminName}"></td>
-                </tr>
+                    </div>
+                    <div class="col-1" th:text="${pinnedArticle.viewCount}"></div>
+                    <div class="col-3" th:text="${pinnedArticle.createdAt}"></div>
+                    <div class="col-2" th:text="${pinnedArticle.adminName}"></div>
+                </div>
 
-                <tr th:each="article : ${articles}">
-                    <td th:text="${article.categoryName}"></td>
-                    <td style="text-align: left">
+                <div class="d-flex gap-1 p-1 border-bottom" th:each="article : ${articles}">
+                    <div class="col-1" th:text="${article.categoryName}"></div>
+                    <div class="col-3" style="text-align: left">
                         <a th:href="@{/notice/{id}(id=${article.articleId})}">
                             <span th:text="${article.title}"></span>
                         </a>
-                    </td>
-                    <td th:text="${article.viewCount}"></td>
-                    <td th:text="${article.createdAt}"></td>
-                    <td th:text="${article.adminName}"></td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                    <div class="col-1" th:text="${article.viewCount}"></div>
+                    <div class="col-3" th:text="${article.createdAt}"></div>
+                    <div class="col-2" th:text="${article.adminName}"></div>
+                </div>
+            </div>
+        </div>
 
         <div th:replace="~{common/pageNav :: pageNav(page=${page})}"></div>
     </article>

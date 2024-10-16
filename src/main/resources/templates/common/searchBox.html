@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <body>
     <div th:fragment="searchBox(categories, search)">
-        <div th:if="${categories != null}">
-            <form id="searchForm" class="card-group flex-column gap-lg-2">
-                <div class="col-12">
+        <div th:if="${categories != null}" class="d-flex flex-column px-2">
+            <form id="searchForm" >
+                <div class="p-3 border border-black">
                     <label for="searchDate">일시</label>
                         <input th:value="${search.startDate}" type="date" name="startDate" id="searchDate">
 
@@ -21,13 +21,13 @@
                             </option>
                         </select>
 
-                    <label>
+                    <label class="align-items-stretch">
                         <input th:value="${search.keyword}" type="text" name="keyword"/>
                     </label>
 
-                    <button type="button" id="searchBtn">검색</button>
+                    <button type="button" class="bg-body-secondary px-3" id="searchBtn">검색</button>
                 </div>
-                <div class="flex-row justify-content-between col-12">
+                <div class="d-flex flex-row justify-content-between py-2">
                     <label for="itemPerPage">
                         <select name="perPage" id="itemPerPage">
                             <option th:selected="${search.perPage} == 10" value="10">10</option>
