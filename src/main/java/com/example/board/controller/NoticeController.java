@@ -65,11 +65,7 @@ public class NoticeController extends ArticleController {
         model.addAttribute("categories", categories);
 
         //article Id가 있다면 수정 페이지로 해당 article 정보를 가져 온다
-        if (articleId != null) {
-            Article article = articleService.getArticleDetail(articleId);
-            ArticleResDto.ArticleDetail articleDetail = ArticleMapper.INSTANCE.toArticleDetailDto(article);
-            model.addAttribute("article", articleDetail);
-        }
+        model.addAttribute("article", getArticleDetail(articleId));
 
         return "view/noticeForm";
     }

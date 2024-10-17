@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<div layout:fragment="content">
+    <h2>공지사항 관리</h2>
+
+    <form id="saveForm" enctype="multipart/form-data">
+        <div class="d-flex px-4">
+            <div class="d-flex flex-column col-2">
+                <label class="h-20 mb-2" for="category">분류</label>
+                <label class="h-20 mb-2" for="title">제목</label>
+                <label class="" for="content">내용</label>
+                <label class="h-20 mb-2" for="file">첨부</label>
+            </div>
+
+            <div class="d-flex flex-column col-10">
+                <select name="categoryId" id="category" class="h-20 mb-2">
+                    <option value=0>카테고리 선택</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.categoryId}"
+                            th:text="${category.name}"
+                            th:attr="selected = ${article != null and article.categoryId == category.categoryId}"
+                    ></option>
+                </select>
+
+                <input  type="text" name="title" id="title" placeholder="필수 입력" class="h-20 mb-2"
+                        th:value="${article == null ? '' : article.title}">
+
+
+                <textarea type="text" name="content" id="content" class="mb-2"
+                          style="max-height: 300px; resize: vertical;"
+                          th:text="${article == null ? '' : article.content}"
+                ></textarea>
+
+                <input type="file" name="files" id="file" class="h-20 mb-2">
+                <button type="button" id="fileBtn" onclick="fileAdd()">추가</button>
+
+                <input type="hidden"
+                       th:if="${article != null}"
+                       th:value="${article.articleId}"
+                       name="articleId">
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <button type="button" onclick="location.href='/notice'">취소</button>
+            <button type="submit" id="saveBtn" th:text="${article == null ? '등록' : '수정'}"></button>
+        </div>
+    </form>
+
+<script>
+    const saveForm = document.getElementById('saveForm');
+    const category = document.getElementById('category');
+    const title = document.getElementById('title');
+    const content = document.getElementById('content');
+
+    document.getElementById('saveForm').addEventListener('submit', async function (event) {
+        //submit이벤트로 보내는거면 기본 submit동작을 못하게해야한다
+        event.preventDefault();
+
+        if (!confirm('등록 하시겠습니까?')) {
+            return;
+        }
+        if (!isValidForm()) {
+            return;
+        }
+
+        const formData = new FormData(saveForm);
+        const response = await fetch('/free/form', {
+            method: 'post',
+            body: formData
+        });
+        if (response.ok) {
+            const data = await response.json();
+            alert(data.message)
+            window.location.href = `/notice/${data.data}`
+        } else {
+            console.error('Error creating post');
+        }
+    })
+
+    function isValidForm() {
+        if (category.value === '0') {
+            alert('카테고리 선택은 필수 입니다')
+            return false;
+        }
+        if (lengthCheck(title, 100)) {
+            alert('제목은 100글자 미만으로 입력해주세요')
+            return false;
+        }
+        if (lengthCheck(content, 4000)) {
+            alert('내용은 4000글자 미만으로 입력해주세요')
+            return false;
+        }
+        return true;
+    }
+
+    function lengthCheck(target, max) {
+        return target.value.length > max;
+    }
+
+    function fileAdd() {
+        const newFile = document.createElement('input')
+        newFile.setAttribute('type', 'file')
+        newFile.setAttribute('name', 'files')
+        newFile.setAttribute('class', 'h-20 mb-2')
+
+        document.getElementById('file').insertAdjacentElement('afterend', newFile);
+    }
+</script>
+</div>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<div layout:fragment="content">
+    <h3 class="m-2 mb-4">자유게시판 관리</h3>
+    <div th:replace="~{common/searchBox :: searchBox(categories=${categories}, search=${search})}"></div>
+    <article class="px-3">
+        <div class="d-flex justify-content-end">
+            <a class="d-flex btn btn-light" href="/free/form">등록</a>
+        </div>
+        <div class="d-flex flex-column just">
+            <div class="d-flex gap-1 border-top border-black border-bottom">
+                <div class="col-1">분류</div>
+                <div class="col-3">제목</div>
+                <div class="col-1">조회수</div>
+                <div class="col-3">등록 일시</div>
+                <div class="col-2">작성자</div>
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="d-flex gap-1 p-1 border-bottom" th:each="article : ${articles}">
+                    <div class="col-1" th:text="${article.categoryName}"></div>
+                    <div class="col-3" style="text-align: left">
+                        <a th:href="@{/free/{id}(id=${article.articleId})}" class="text-decoration-none">
+                            <span th:text="${article.title}"></span>
+                        </a>
+                    </div>
+                    <div class="col-1" th:text="${article.viewCount}"></div>
+                    <div class="col-3" th:text="${article.createdAt}"></div>
+                    <div class="col-2" th:text="${article.register}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{common/pageNav :: pageNav(page=${page})}"></div>
+    </article>
+</div>
+</html>

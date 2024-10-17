@@ -1,6 +1,7 @@
 package com.example.board.dto.mappers;
 
 import com.example.board.dto.ArticleResDto;
+import com.example.board.dto.free.FreeBoardDto;
 import com.example.board.dto.PageResponse;
 import com.example.board.model.Article;
 import com.example.board.util.Page;
@@ -39,5 +40,11 @@ public interface ArticleMapper {
         }
         return "unknown";
     }
+
+    List<FreeBoardDto> toFreeBoardDto(List<Article> articles);
+
+    @Mapping(target = "register", expression = "java(chooseAuthor(article))")
+    @Mapping(target = "categoryName", source = "article.category.name")
+    FreeBoardDto toFreeBoardDto(Article article);
 
 }
