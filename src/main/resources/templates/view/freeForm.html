@@ -12,7 +12,8 @@
                 <label class="h-20 mb-2" for="category">분류</label>
                 <label class="h-20 mb-2" for="title">제목</label>
                 <label class="" for="content">내용</label>
-                <label class="h-20 mb-2" for="file">첨부</label>
+                <label class="h-20 m
+                b-2" for="file">첨부</label>
             </div>
 
             <div class="d-flex flex-column col-10">
@@ -55,33 +56,39 @@
     const category = document.getElementById('category');
     const title = document.getElementById('title');
     const content = document.getElementById('content');
+    const allowedExtension = ['jpg', 'gif', 'png', 'zip'];
+    const maxFileAmount = 5;
+    const limitFileSize = 2 * 1024 * 1024;
 
     document.getElementById('saveForm').addEventListener('submit', async function (event) {
         //submit이벤트로 보내는거면 기본 submit동작을 못하게해야한다
         event.preventDefault();
 
+        const formData = new FormData(saveForm);
+
         if (!confirm('등록 하시겠습니까?')) {
             return;
         }
-        if (!isValidForm()) {
+        if (!isValidForm(formData)) {
             return;
         }
 
-        const formData = new FormData(saveForm);
         const response = await fetch('/free/form', {
             method: 'post',
             body: formData
         });
+        const data = await response.json();
+
         if (response.ok) {
-            const data = await response.json();
             alert(data.message)
-            window.location.href = `/notice/${data.data}`
+            window.location.href = `/free/${data.data}`
         } else {
-            console.error('Error creating post');
+            console.error(data.message)
+            alert(data.message)
         }
     })
 
-    function isValidForm() {
+    function isValidForm(formData) {
         if (category.value === '0') {
             alert('카테고리 선택은 필수 입니다')
             return false;
@@ -94,6 +101,9 @@
             alert('내용은 4000글자 미만으로 입력해주세요')
             return false;
         }
+        if (isInvalidFiles(formData)) {
+            return false;
+        }
         return true;
     }
 
@@ -102,12 +112,38 @@
     }
 
     function fileAdd() {
+        if (new FormData(saveForm).getAll('files').length >= maxFileAmount) {
+            alert('파일은 최대' + maxFileAmount + '개 까지 업로드 가능합니다')
+            return;
+        }
         const newFile = document.createElement('input')
         newFile.setAttribute('type', 'file')
         newFile.setAttribute('name', 'files')
         newFile.setAttribute('class', 'h-20 mb-2')
 
         document.getElementById('file').insertAdjacentElement('afterend', newFile);
+    }
+
+    function isInvalidFiles(formData) {
+        const files = formData.getAll('files');
+
+        const isInvalid = files.some(file => {
+            const fileExtension = file.name.slice(file.name.lastIndexOf('.') + 1)
+
+            if (file.name === '' || file.size === 0) {
+                return;
+            }
+            if (file.size > limitFileSize) {
+                alert(file.name + ' 파일 크기는 ' + (limitFileSize/1024/1024) + 'mb 초과로 업로드 할 수 없습니다')
+                return true;
+            }
+            if (!allowedExtension.includes(fileExtension)) {
+                alert(file.name + ' 파일의 해당 확장자는 허용되지 않습니다.')
+                return true;
+            }
+        })
+
+        return isInvalid;
     }
 </script>
 </div>

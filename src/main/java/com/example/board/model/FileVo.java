@@ -1,12 +1,12 @@
 package com.example.board.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FileVo {
 
     private int fileId;
@@ -14,6 +14,6 @@ public class FileVo {
     private String filename;
     private String originalName;
     private String filePath;
-    private String fileSize;
+    private Long fileSize;
     private String extension;
 }

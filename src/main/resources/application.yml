@@ -8,7 +8,10 @@ spring:
     password: ${db_password}
   jpa:
     show-sql: true
-
+  servlet:
+    multipart:
+      location: E:\attaches\
+      max-file-size: 2MB
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

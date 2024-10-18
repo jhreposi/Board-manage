@@ -3,14 +3,12 @@ package com.example.board.dto.free;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class FreeRequestDto {
     private int articleId;
 
@@ -24,9 +22,6 @@ public class FreeRequestDto {
     @NotBlank
     @Size(max = 4000, message = "본문은 최대 4000글자입니다")
     private String content;
-
-    @Builder.Default
-    private String pinnedYn = "N";
 
     private int registerId;
 }
