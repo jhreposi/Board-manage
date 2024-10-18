@@ -108,4 +108,8 @@ public class FileService {
         throw new RuntimeException("허용 되지 않는 확장자");
     }
 
+    public List<FileVo> getFilesByArticleId(int articleId) {
+        return fileMapper.selectFilesByArticleId(articleId);
+    }
+
 }

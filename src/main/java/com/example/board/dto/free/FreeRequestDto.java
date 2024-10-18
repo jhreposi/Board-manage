@@ -23,5 +23,8 @@ public class FreeRequestDto {
     @Size(max = 4000, message = "본문은 최대 4000글자입니다")
     private String content;
 
+    @Builder.Default
+    private String pinnedYn = "N";
+
     private int registerId;
 }

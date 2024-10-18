@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<div layout:fragment="content">
+    <div>
+        작성자: &nbsp;<span th:text="${article.author}"></span>
+        <div>
+            등록일시 <span th:text="${article.createdAt}"></span>
+            <span th:if="${article.updatedAt != null}">
+                수정일시 <span th:text="${article.updatedAt}"></span>
+            </span>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            [<span th:text="${article.categoryName}" ></span>]
+            <span>
+                제목:&nbsp;<span  th:text="${article.title}"></span>
+            </span>
+        </div>
+        조회수:
+        <span th:text="${article.viewCount}" style="margin:0 10px"></span>
+    </div>
+
+    <div th:text="${article.content}" style="border: 1px solid #ccc; padding: 10px; width: 96%; height: 150px;">
+    </div>
+
+    <div>
+        <div th:each="file : ${files}">
+            <div th:text="${file.getOriginalName}"></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div>
+        <a th:href="@{/free/form(articleId = ${article.articleId})}">수정</a>
+        <a href="/free">목록</a>
+        <button type="button" id="removeBtn">삭제</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            const articleId = window.location.pathname.split('/').pop();
+
+            document.getElementById('removeBtn').addEventListener('click', async function () {
+                try {
+                    const response = await fetch(`/free?articleId=${articleId}`, {
+                        method: 'delete'
+                    });
+
+                    if (response.status === 204) {
+                        alert('게시글이 삭제되었습니다.')
+                        window.location.href = '/notice'
+                    } else if (response.status === 403) {
+                        window.location.href = '/login'
+                    }
+                } catch (error) {
+                    console.error('error 발생:', error);
+                }
+            })
+        })
+    </script>
+</div>
+</html>

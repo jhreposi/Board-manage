@@ -10,4 +10,15 @@
             (#{filename}, #{originalName}, #{filePath}, #{fileSize}, #{extension}, #{articleId})
     </insert>
 
+    <select id="selectFilesByArticleId" parameterType="int" resultType="FileVo">
+        SELECT
+            file_id,
+            original_name,
+            article_id
+        FROM
+            file
+        WHERE
+            article_id = #{articleId}
+    </select>
+
 </mapper>

@@ -4,6 +4,7 @@ import com.example.board.dto.*;
 import com.example.board.dto.free.FreeBoardDto;
 import com.example.board.dto.free.FreeRequestDto;
 import com.example.board.dto.mappers.ArticleMapper;
+import com.example.board.dto.mappers.FileMapper;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.Board;
@@ -55,6 +56,21 @@ public class FreeController extends ArticleController{
         model.addAttribute("articles", freeArticles);
 
         return "view/free";
+    }
+
+    @GetMapping("/free/{articleId}")
+    public String freeArticleDetail(@PathVariable("articleId") int articleId, Model model) {
+        Article freeArticle = articleService.getArticleDetail(articleId);
+        ArticleResDto.ArticleDetail articleDetail = ArticleMapper.INSTANCE.toArticleDetailDto(freeArticle);
+
+        List<FileVo> fileVos = fileService.getFilesByArticleId(articleId);
+
+        List<FileResDto> responseFiles = FileMapper.INSTANCE.toFileDtoFrom(fileVos);
+
+        model.addAttribute("article", articleDetail);
+        model.addAttribute("files", responseFiles);
+
+        return "view/freeDetail";
     }
 
     @GetMapping("/free/form")
