@@ -21,4 +21,17 @@
             article_id = #{articleId}
     </select>
 
+    <select id="selectFileById" resultType="FileVo" parameterType="int">
+        SELECT
+            file_id,
+            article_id,
+            filename,
+            original_name,
+            file_path
+        FROM
+            file
+        WHERE
+            file_id = #{fileId}
+    </select>
+
 </mapper>

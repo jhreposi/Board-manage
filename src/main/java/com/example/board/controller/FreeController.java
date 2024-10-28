@@ -14,13 +14,19 @@ import com.example.board.service.FileService;
 import com.example.board.service.SessionHelper;
 import com.example.board.util.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -103,6 +109,22 @@ public class FreeController extends ArticleController{
                 .build();
 
         return ResponseEntity.ok(responseData);
+    }
+
+    @ResponseBody
+    @GetMapping("/file/download")
+    public ResponseEntity<Resource> fileDownload(@RequestParam(name = "fileId") int fileId) {
+        FileVo fileVo = fileService.getFileById(fileId);
+
+        Resource resource = fileService.getResource(fileVo);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
+                        .filename(fileVo.getOriginalName(), StandardCharsets.UTF_8)
+                        .build()
+                        .toString())
+                .body(resource);
     }
 
 }

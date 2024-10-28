@@ -6,8 +6,11 @@ import com.example.board.repository.FileMapper;
 import com.example.board.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,6 +18,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -110,6 +114,26 @@ public class FileService {
 
     public List<FileVo> getFilesByArticleId(int articleId) {
         return fileMapper.selectFilesByArticleId(articleId);
+    }
+
+    public FileVo getFileById(int fileId) {
+        FileVo fileVo = fileMapper.selectFileById(fileId).orElse(null);
+
+        Assert.notNull(fileVo, "일치하는 파일 정보가 없습니다");
+
+        return fileVo;
+    }
+
+    public Resource getResource(FileVo fileVo) {
+        String filePath = fileVo.getFilePath() + fileVo.getFilename();
+
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            throw new RuntimeException("파일이 해당경로(" + filePath + ") 에 존재하지 않습니다");
+        }
+
+        return new FileSystemResource(file);
     }
 
 }

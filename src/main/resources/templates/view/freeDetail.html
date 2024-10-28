@@ -30,7 +30,9 @@
 
     <div>
         <div th:each="file : ${files}">
-            <div th:text="${file.getOriginalName}"></div>
+            <a th:href="@{/file/download(fileId=${file.fileId})}" th:text="${file.originalName}"
+               class="text-black"
+            ></a>
             <div></div>
         </div>
     </div>

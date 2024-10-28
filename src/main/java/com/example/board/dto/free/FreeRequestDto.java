@@ -8,6 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 public class FreeRequestDto {
     private int articleId;
