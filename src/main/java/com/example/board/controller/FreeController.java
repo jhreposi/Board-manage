@@ -4,12 +4,15 @@ import com.example.board.dto.*;
 import com.example.board.dto.free.FreeBoardDto;
 import com.example.board.dto.free.FreeRequestDto;
 import com.example.board.dto.mappers.ArticleMapper;
+import com.example.board.dto.mappers.CommentMapper;
 import com.example.board.dto.mappers.FileMapper;
 import com.example.board.global.response.ResponseData;
 import com.example.board.model.Article;
 import com.example.board.model.Board;
+import com.example.board.model.Comment;
 import com.example.board.model.FileVo;
 import com.example.board.service.ArticleService;
+import com.example.board.service.CommentService;
 import com.example.board.service.FileService;
 import com.example.board.service.SessionHelper;
 import com.example.board.util.Page;
@@ -33,12 +36,14 @@ import java.util.List;
 @Controller
 public class FreeController extends ArticleController{
     ArticleService articleService;
+    CommentService commentService;
     FileService fileService;
     SessionHelper sessionHelper;
 
-    public FreeController(ArticleService articleService,FileService fileService, SessionHelper sessionHelper) {
+    public FreeController(ArticleService articleService, CommentService commentService, FileService fileService, SessionHelper sessionHelper) {
         super(articleService);
         this.articleService = articleService;
+        this.commentService = commentService;
         this.fileService = fileService;
         this.sessionHelper = sessionHelper;
     }
@@ -69,11 +74,14 @@ public class FreeController extends ArticleController{
         Article freeArticle = articleService.getArticleDetail(articleId);
         ArticleResDto.ArticleDetail articleDetail = ArticleMapper.INSTANCE.toArticleDetailDto(freeArticle);
 
-        List<FileVo> fileVos = fileService.getFilesByArticleId(articleId);
+        List<Comment> commentsEntity = commentService.getCommentsBy(articleId);
+        List<CommentDto> comments = CommentMapper.INSTANCE.toCommentDtoFrom(commentsEntity);
 
+        List<FileVo> fileVos = fileService.getFilesByArticleId(articleId);
         List<FileResDto> responseFiles = FileMapper.INSTANCE.toFileDtoFrom(fileVos);
 
         model.addAttribute("article", articleDetail);
+        model.addAttribute("comments", comments);
         model.addAttribute("files", responseFiles);
 
         return "view/freeDetail";
@@ -125,6 +133,15 @@ public class FreeController extends ArticleController{
                         .build()
                         .toString())
                 .body(resource);
+    }
+
+    @PostMapping("/comment")
+    public String commentCreate(CommentDto requestComment) {
+        Comment comment = CommentMapper.INSTANCE.toCommentFrom(requestComment);
+
+        commentService.createComment(comment);
+
+        return "redirect:/free/"+requestComment.getArticleId();
     }
 
 }

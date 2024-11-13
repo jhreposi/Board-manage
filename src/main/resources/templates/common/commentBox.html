@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<body>
+<div th:fragment="commentBox(comments, articleId)">
+    <div class="d-flex flex-column justify-content-center p-3 h-sm">
+            <div class="d-flex" th:each="comment : ${comments}" th:text="${comment.content}">
+            </div>
+
+            <form action="/comment" method="post" class="d-flex flex-row w-100 justify-content-between">
+                <label for="comment" class="d-flex col-9">
+                    <textarea type="text" name="content" id="comment" class="w-100" style="resize: none"></textarea>
+                </label>
+                <input type="hidden" name="articleId" th:value="${articleId}">
+                <button type="submit" class="w-sm btn-b">등록</button>
+            </form>
+    </div>
+</div>
+</body>
+</html>

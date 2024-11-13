@@ -1,13 +1,15 @@
-package com.example.board.model;
+package com.example.board.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @ToString
-public class Comment {
+public class CommentDto {
     private int commentId;
     private int articleId;
     private int memberId;

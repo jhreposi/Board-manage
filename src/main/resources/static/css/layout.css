@@ -45,7 +45,18 @@
 }
 
 .bottom-right {
+    height: 100vh;
     flex: 1;
     padding: 10px;
     background-color: #f9f9f9;
+}
+
+.h-sm {
+    height: 100px;
+}
+.w-sm {
+    width: 16%;
+}
+.btn-b {
+    border-width: 1px;
 }

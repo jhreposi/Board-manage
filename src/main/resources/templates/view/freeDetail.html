@@ -4,66 +4,82 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 <div layout:fragment="content">
-    <div>
-        작성자: &nbsp;<span th:text="${article.author}"></span>
-        <div>
-            등록일시 <span th:text="${article.createdAt}"></span>
-            <span th:if="${article.updatedAt != null}">
-                수정일시 <span th:text="${article.updatedAt}"></span>
-            </span>
+    <div class="m-3">
+        <div class="d-flex flex-column mb-3">
+            <div class="d-flex flex-row justify-content-between mb-1 mx-1">
+                <div class="col-9">
+                    [<span th:text="${article.categoryName}" ></span>]
+                    <span>
+                        <span  th:text="${article.title}"></span>
+                    </span>
+                </div>
+                <div class="col-3 text-end">
+                    <div th:if="${article.updatedAt == null}">
+                        <span th:text="${article.createdAt}"></span>
+                    </div>
+                    <div th:unless="${article.updatedAt == null}">
+                        <span th:text="${article.updatedAt}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row justify-content-between mx-1">
+                <div class="col-9">
+                    <span th:text="${article.author}"></span>
+                </div>
+                <div class="col-3 text-end">
+                    조회수 <span th:text="${article.viewCount}"></span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div>
-        <div>
-            [<span th:text="${article.categoryName}" ></span>]
-            <span>
-                제목:&nbsp;<span  th:text="${article.title}"></span>
-            </span>
+        <div th:text="${article.content}" style="border: 1px solid #ccc; padding: 10px; height: 150px;"
+             class="mb-2"
+        >
         </div>
-        조회수:
-        <span th:text="${article.viewCount}" style="margin:0 10px"></span>
-    </div>
 
-    <div th:text="${article.content}" style="border: 1px solid #ccc; padding: 10px; width: 96%; height: 150px;">
-    </div>
-
-    <div>
-        <div th:each="file : ${files}">
-            <a th:href="@{/file/download(fileId=${file.fileId})}" th:text="${file.originalName}"
-               class="text-black"
-            ></a>
-            <div></div>
+        <div class="d-flex justify-content-end">
+            <div th:each="file : ${files}" class="mx-3">
+                <a th:href="@{/file/download(fileId=${file.fileId})}" th:text="${file.originalName}"
+                   class="text-black"
+                ></a>
+            </div>
         </div>
-    </div>
 
-    <div>
-        <a th:href="@{/free/form(articleId = ${article.articleId})}">수정</a>
-        <a href="/free">목록</a>
-        <button type="button" id="removeBtn">삭제</button>
-    </div>
+        <div class="d-flex justify-content-center gap-3">
+            <a th:href="@{/free/form(articleId = ${article.articleId})}"
+               class="text-decoration-none">수정</a>
+            <a href="/free"
+               class="text-decoration-none">목록</a>
+            <div type="button" id="removeBtn"
+                class="">삭제</div>
+        </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function (){
-            const articleId = window.location.pathname.split('/').pop();
+        <div th:replace="~{common/commentBox :: commentBox(comments = ${comments}, articleId = ${article.articleId})}"></div>
 
-            document.getElementById('removeBtn').addEventListener('click', async function () {
-                try {
-                    const response = await fetch(`/free?articleId=${articleId}`, {
-                        method: 'delete'
-                    });
 
-                    if (response.status === 204) {
-                        alert('게시글이 삭제되었습니다.')
-                        window.location.href = '/notice'
-                    } else if (response.status === 403) {
-                        window.location.href = '/login'
+        <script>
+            document.addEventListener('DOMContentLoaded', function (){
+                const articleId = window.location.pathname.split('/').pop();
+
+                document.getElementById('removeBtn').addEventListener('click', async function () {
+                    try {
+                        const response = await fetch(`/free?articleId=${articleId}`, {
+                            method: 'delete'
+                        });
+
+                        if (response.status === 204) {
+                            alert('게시글이 삭제되었습니다.')
+                            window.location.href = '/notice'
+                        } else if (response.status === 403) {
+                            window.location.href = '/login'
+                        }
+                    } catch (error) {
+                        console.error('error 발생:', error);
                     }
-                } catch (error) {
-                    console.error('error 발생:', error);
-                }
+                })
             })
-        })
-    </script>
+        </script>
+    </div>
 </div>
 </html>
